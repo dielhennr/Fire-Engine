@@ -88,6 +88,10 @@ public class InvertedIndex {
 	 */
 	public void writeLoc(Path outputFile) {
 		try {
+			for(String entry : this.locations.keySet()) {
+				System.out.println(entry);
+				
+			}
 			PrettyJSONWriter.asObject(this.locations, outputFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

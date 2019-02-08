@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public class Driver {
 
+	///
 	/**
 	 * Parses the command-line arguments to build and use an in-memory search engine
 	 * from files or the web.
@@ -53,20 +54,11 @@ public class Driver {
 
 		}
 		if (map.hasFlag("-index")) {
-			
-			if (!map.hasValue("-index")) {
-				index.writeIndex(Paths.get("index.json"));
-			}else {
-				index.writeIndex(map.getPath("-index"));
-			}
+			index.writeIndex(map.getPath("-index", Paths.get("index.json")));
 		}
 		
 		if (map.hasFlag("-locations")) {
-			if (!map.hasValue("-locations")) {
-				index.writeLoc(Paths.get("locations.json"));
-			}else {
-				index.writeLoc(map.getPath("-locations"));
-			}
+			index.writeLoc(map.getPath("-locations", Paths.get("locations.json")));
 		}
 		
 		
