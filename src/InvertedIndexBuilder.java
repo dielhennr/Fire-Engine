@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +13,14 @@ import java.util.List;
  */
 public class InvertedIndexBuilder {
 
-	private InvertedIndex index;
 
 	/**
 	 * Builds an InvertedIndex object from a list of files
 	 * 
 	 * @param files
-	 * @param map
+	 * @param index
 	 */
-	public void build(ArrayList<Path> files, ArgumentMap map) {
-
-		index = new InvertedIndex();
+	public void build(ArrayList<Path> files, InvertedIndex index) {
 
 		for (Path file : files) {
 			File f = file.toFile();
@@ -44,30 +40,10 @@ public class InvertedIndexBuilder {
 			}
 		}
 		
-		if (map.hasFlag("-index")) {
-			
-			if (!map.hasValue("-index")) {
-				write(Paths.get("index.json"));
-			}else {
-				write(map.getPath("-index"));
-			}
-		}
 		
 
 	}
 
-	/**
-	 * Writes an InvertedIndex to a JSON file
-	 * 
-	 * @param outputFile
-	 */
-	public void write(Path outputFile) {
-		try {
-			PrettyJSONWriter.asDoubleNestedObject(index.retrieve(), outputFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 
 }

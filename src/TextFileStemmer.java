@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
@@ -18,6 +19,8 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  */
 public class TextFileStemmer {
 
+	//Stores files with the number of words in them.
+	
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
@@ -68,27 +71,30 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-		// TODO Fill this in.
-		// TODO Use try-with-resources, buffered readers and writers, and UTF-8
-		// encoding.
+		
+		
+		
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()))) {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
-
+				
+				
 				String line;
 				while ((line = br.readLine()) != null) {
-					stemLine(line).stream().forEach(e -> {
+					List<String> stemmedLine = stemLine(line);
+					stemmedLine.stream().forEach(e -> {
 						try {
 							out.write(e + " ");
 						} catch (IOException e1) {
 						}
-					});
+					});	
 					out.newLine();
 				}
-
+				
+				
 			}
 
-		}
-
+		}	
+		
 	}
 
 	/**

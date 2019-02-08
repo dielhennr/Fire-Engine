@@ -20,6 +20,7 @@ public class Driver {
 	public static void main(String[] args) {
 
 		ArgumentMap map = new ArgumentMap(args);
+		InvertedIndex index = new InvertedIndex();
 		
 		
 		boolean run = true;
@@ -46,11 +47,28 @@ public class Driver {
 				ArrayList<Path> files = FileFinder.traverse(inFile);
 
 				InvertedIndexBuilder builder = new InvertedIndexBuilder();
-				builder.build(files, map);
+				builder.build(files, index);
 				
 			}
 
 		}
+		if (map.hasFlag("-index")) {
+			
+			if (!map.hasValue("-index")) {
+				index.writeIndex(Paths.get("index.json"));
+			}else {
+				index.writeIndex(map.getPath("-index"));
+			}
+		}
+		
+		if (map.hasFlag("-locations")) {
+			if (!map.hasValue("-locations")) {
+				index.writeLoc(Paths.get("locations.json"));
+			}else {
+				index.writeLoc(map.getPath("-locations"));
+			}
+		}
+		
 		
 		
 	}

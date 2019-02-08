@@ -1,5 +1,6 @@
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -13,13 +14,14 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<String, TreeMap<String, TreeSet<Integer>>> index; // TODO Add the final
-
+	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	private final TreeMap<String, Integer> locations;
 	/**
 	 * Initializes the index.
 	 */
 	public InvertedIndex() {
-		this.index = new TreeMap<>();
+		this.index = new TreeMap<String, TreeMap<String, TreeSet<Integer>>>();
+		this.locations = new TreeMap<String, Integer>();
 	}
 
 	// TODO Update Javadoc
@@ -32,26 +34,12 @@ public class InvertedIndex {
 	 * @return true if this index did not already contain this word and position
 	 */
 	public boolean add(String word, String file, int position) {
-		/*
-		 * TODO: Make sure you initialize any inner data structures.
-		 */
-		word = word.trim(); // TODO Remove
-		if (!index.containsKey(word)) {
-			index.put(word, new TreeMap<String, TreeSet<Integer>>());
-		}
 		
-		if (!index.get(word).containsKey(file)) {
-			index.get(word).put(file, new TreeSet<Integer>());
-
-		}
+		locations.put(file, locations.getOrDefault(file, 0) + 1);
+		index.putIfAbsent(word, new TreeMap<String, TreeSet<Integer>>());
+		index.get(word).putIfAbsent(file, new TreeSet<Integer>());
+		return index.get(word).get(file).add(position);
 		
-		// TODO return index.get(word).get(file).add(position);
-		if (!index.get(word).get(file).contains(position)) {
-			index.get(word).get(file).add(position);
-			return true;
-		}
-		
-		return false;
 	}
 
 	/**
@@ -78,14 +66,33 @@ public class InvertedIndex {
 		return changed;
 	}
 
-	// TODO Never return a reference to a private mutable object
+	
 	/**
-	 * Returns the whole TreeMap
+	 * Writes the Inverted Index with JSONWriter
 	 * 
 	 * @return index
 	 */
-	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> retrieve() {
-		return index;
+	public void writeIndex(Path outputFile) {
+		try {
+			PrettyJSONWriter.asDoubleNestedObject(this.index, outputFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Writes the locations with JSONWriter
+	 * 
+	 * @return index
+	 */
+	public void writeLoc(Path outputFile) {
+		try {
+			PrettyJSONWriter.asObject(this.locations, outputFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/* TODO
@@ -142,5 +149,7 @@ public class InvertedIndex {
 	public String toString() {
 		return this.index.toString();
 	}
+
+	
 
 }
