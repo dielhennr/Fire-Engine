@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,25 +20,8 @@ public class Driver {
 
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
-		
-		
-		boolean run = true;
-		if (map.isEmpty() || !map.hasValue("-path") || !map.hasFlag("-index")) {
-			run = false;
-		}
-		
-		if (map.hasFlag("-index") && !map.hasFlag("-path")) {
-			if (!map.hasValue("-index")) {
-				try {
-					Files.createFile(Paths.get("index.json"));
-				} catch (IOException e) {
-					System.err.println("Trouble outputting empty file");
-				}
-			}
-			run = false;
-		}
 
-		if (run) {
+		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
 
 			if (inFile.toFile().exists()) {
@@ -51,14 +32,16 @@ public class Driver {
 				builder.build(files, index);
 				
 			}
-
 		}
+
+		
 		if (map.hasFlag("-index")) {
 			index.writeIndex(map.getPath("-index", Paths.get("index.json")));
 		}
 		
 		if (map.hasFlag("-locations")) {
 			index.writeLoc(map.getPath("-locations", Paths.get("locations.json")));
+			
 		}
 		
 		
