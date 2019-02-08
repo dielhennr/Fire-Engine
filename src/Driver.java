@@ -1,42 +1,54 @@
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Arrays;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
- * Class responsible for running this project based on the provided command-line
- * arguments. See the README for details.
- *
- * @author CS 212 Software Development
- * @author University of San Francisco
- * @version Spring 2019
+ * Driver class
+ * 
+ * @author dielhennr
  */
 public class Driver {
 
 	/**
-	 * Initializes the classes necessary based on the provided command-line
-	 * arguments. This includes (but is not limited to) how to build or search an
-	 * inverted index.
+	 * Parses the command-line arguments to build and use an in-memory search engine
+	 * from files or the web.
 	 *
-	 * @param args flag/value pairs used to start this program
+	 * @param args the command-line arguments to parse
 	 */
 	public static void main(String[] args) {
-		// store initial start time
-		Instant start = Instant.now();
 
-		// TODO Modify this method as necessary.
-		System.out.println(Arrays.toString(args));
+		ArgumentMap map = new ArgumentMap(args);
+		
+		
+		boolean run = true;
+		if (map.isEmpty() || !map.hasValue("-path") || !map.hasFlag("-index")) {
+			run = false;
+		}
+		
+		if (map.hasFlag("-index") && !map.hasFlag("-path")) {
+			Path file = null;
+			if (map.hasValue("-index")) {
+				file = map.getPath("-index");
+			}else {
+				file = Paths.get("index.json");
+			}
+			run = false;
+		}
 
-		// calculate time elapsed and output
-		Duration elapsed = Duration.between(start, Instant.now());
-		double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
-		System.out.printf("Elapsed: %f seconds%n", seconds);
+		if (run) {
+			Path inFile = map.getPath("-path");
+
+			if (inFile.toFile().exists()) {
+
+				ArrayList<Path> files = FileFinder.traverse(inFile);
+
+				InvertedIndexBuilder builder = new InvertedIndexBuilder();
+				builder.build(files, map);
+			}
+
+		}
+		
+		
 	}
 
-	/*
-	 * Generally, "driver" classes are responsible for setting up and calling other
-	 * classes, usually from a main() method that parses command-line parameters. If
-	 * the driver were only responsible for a single class, we use that class name.
-	 * For example, "PizzaDriver" is what we would name a driver class that just
-	 * sets up and calls the Pizza class.
-	 */
 }
