@@ -16,6 +16,7 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> locations;
+	
 	/**
 	 * Initializes the index.
 	 */
@@ -95,10 +96,6 @@ public class InvertedIndex {
 		}
 	}
 
-	/* TODO
-	public void toJSON(Path path) {
-//		call TreeJSONWriter.asDoubleNestedObject(index, ...)
-	}*/
 
 	/**
 	 * Returns the number of words stored in the index.

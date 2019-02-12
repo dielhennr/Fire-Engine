@@ -10,7 +10,6 @@ import java.util.ArrayList;
  */
 public class FileFinder {
 	
-	
 	/**
 	 * Checks if the path is a path to a text file.
 	 * 
@@ -25,7 +24,6 @@ public class FileFinder {
 		
 		
 	}
-	
 	
 	/**
 	 * Takes a path to a directory as input and returns a list of 

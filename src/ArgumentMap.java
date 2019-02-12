@@ -131,6 +131,16 @@ public class ArgumentMap {
 		
 		return map.get(flag) != null;
 	}
+	
+	/**
+	 * Determines if the argument map is empty 
+	 *
+	 * @return true if the map is empty
+	 */
+	public boolean isEmpty() {
+		
+		return this.map.isEmpty();
+	}
 
 	/**
 	 * Returns the value to which the specified flag is mapped as a {@link String},
@@ -222,8 +232,5 @@ public class ArgumentMap {
 		System.out.println(map);
 	}
 
-	public boolean isEmpty() {
-		
-		return this.map.isEmpty();
-	}
+
 }

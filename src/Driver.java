@@ -9,7 +9,6 @@ import java.util.ArrayList;
  */
 public class Driver {
 
-	///
 	/**
 	 * Parses the command-line arguments to build and use an in-memory search engine
 	 * from files or the web.

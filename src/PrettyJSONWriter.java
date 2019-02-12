@@ -219,7 +219,7 @@ public class PrettyJSONWriter {
 	 * @param path     the path to the file write to output
 	 * @throws IOException if the writer encounters any issues
 	 *
-	 * @see #asNestedObject(TreeMap, Writer, int)
+	 * @see #asDoubleNestedObject(TreeMap, Writer, int)
 	 */
 	public static void asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path)
 			throws IOException {
@@ -235,7 +235,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to use
 	 * @return a {@link String} containing the elements in pretty JSON format
 	 *
-	 * @see #asNestedObject(TreeMap, Writer, int)
+	 * @see #asDoubleNestedObject(TreeMap, Writer, int)
 	 */
 	public static String asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
@@ -266,7 +266,7 @@ public class PrettyJSONWriter {
 	 * @see #indent(int, Writer)
 	 * @see #quote(String, Writer)
 	 *
-	 * @see #asNestedObject(TreeMap<String, TreeSet<Integer>>, Writer, int)
+	 * @see #asDoubleNestedObject(TreeMap<String, TreeSet<Integer>>, Writer, int)
 	 */
 	public static void asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
 			int level) throws IOException {

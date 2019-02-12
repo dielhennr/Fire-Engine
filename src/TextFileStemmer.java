@@ -48,8 +48,7 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-		// TODO Fill this in.
-		// TODO Try to use streams and lambda functions (optional)!
+		
 		List<String> output = new ArrayList<String>();
 
 		for (String word : TextParser.parse(line)) {
@@ -72,11 +71,8 @@ public class TextFileStemmer {
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
 		
-		
-		
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()))) {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
-				
 				
 				String line;
 				while ((line = br.readLine()) != null) {
@@ -90,11 +86,8 @@ public class TextFileStemmer {
 					out.newLine();
 				}
 				
-				
 			}
-
 		}	
-		
 	}
 
 	/**
