@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Parses and stores command-line arguments into simple key = value pairs.
  *
- * @author dielhennr 
+ * @author dielhennr
  */
 
 public class ArgumentMap {
@@ -20,7 +20,7 @@ public class ArgumentMap {
 	 * Initializes this argument map.
 	 */
 	public ArgumentMap() {
-		
+
 		this.map = new HashMap<String, String>();
 	}
 
@@ -44,15 +44,15 @@ public class ArgumentMap {
 	 * @param args the command line arguments to parse
 	 */
 	public void parse(String[] args) {
-		
+
 		for (int i = 0; i < args.length; i++) {
 			if (isFlag(args[i])) {
-				if (i != args.length - 1 && isValue(args[i+1])) {
-					map.put(args[i], args[i+1]);
+				if (i != args.length - 1 && isValue(args[i + 1])) {
+					map.put(args[i], args[i + 1]);
 				} else {
 					map.put(args[i], null);
 				}
-				
+
 			}
 		}
 	}
@@ -107,7 +107,7 @@ public class ArgumentMap {
 	 * @return number of unique flags
 	 */
 	public int numFlags() {
-		
+
 		return map.size();
 	}
 
@@ -128,17 +128,17 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag is mapped to a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		
+
 		return map.get(flag) != null;
 	}
-	
+
 	/**
-	 * Determines if the argument map is empty 
+	 * Determines if the argument map is empty
 	 *
 	 * @return true if the map is empty
 	 */
 	public boolean isEmpty() {
-		
+
 		return this.map.isEmpty();
 	}
 
@@ -151,9 +151,9 @@ public class ArgumentMap {
 	 *         there is no mapping for the flag
 	 */
 	public String getString(String flag) {
-		
+
 		return map.get(flag);
-		
+
 	}
 
 	/**
@@ -231,6 +231,5 @@ public class ArgumentMap {
 		var map = new ArgumentMap(args);
 		System.out.println(map);
 	}
-
 
 }

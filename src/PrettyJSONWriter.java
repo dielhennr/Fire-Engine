@@ -30,7 +30,7 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asArray(TreeSet<Integer> elements, Writer writer, int level) throws IOException {
-		
+
 		writer.write("[");
 		writer.write(System.lineSeparator());
 
@@ -46,7 +46,7 @@ public class PrettyJSONWriter {
 		}
 		indent(writer, level);
 		writer.write("]");
-		
+
 	}
 
 	/**
@@ -79,8 +79,7 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asArray(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -94,7 +93,7 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asObject(TreeMap<String, Integer> elements, Writer writer, int level) throws IOException {
-		
+
 		writer.write("{");
 		writer.write(System.lineSeparator());
 		for (String elem : elements.keySet()) {
@@ -109,7 +108,7 @@ public class PrettyJSONWriter {
 		}
 
 		writer.write("}");
-		
+
 	}
 
 	/**
@@ -142,8 +141,7 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asObject(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -156,8 +154,9 @@ public class PrettyJSONWriter {
 	 * @param level    the initial indent level
 	 * @throws IOException
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level) throws IOException {
-		
+	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level)
+			throws IOException {
+
 		writer.write("{");
 		writer.write(System.lineSeparator());
 		for (String elem : elements.keySet()) {
@@ -172,7 +171,7 @@ public class PrettyJSONWriter {
 		}
 		indent(writer, level);
 		writer.write("}");
-		
+
 	}
 
 	/**
@@ -205,12 +204,11 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asNestedObject(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Writes the nested map of elements formatted as a nested pretty JSON object to
 	 * the specified file.
@@ -228,7 +226,7 @@ public class PrettyJSONWriter {
 			asDoubleNestedObject(elements, writer, 0);
 		}
 	}
-	
+
 	/**
 	 * Returns the elements as a nested pretty JSON object.
 	 *
@@ -243,8 +241,7 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asDoubleNestedObject(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -288,9 +285,6 @@ public class PrettyJSONWriter {
 		writer.write("}");
 		writer.toString();
 	}
-
-
-
 
 	/**
 	 * Writes the {@code \t} tab symbol by the number of times specified.

@@ -29,22 +29,19 @@ public class Driver {
 
 				InvertedIndexBuilder builder = new InvertedIndexBuilder();
 				builder.build(files, index);
-				
+
 			}
 		}
 
-		
 		if (map.hasFlag("-index")) {
 			index.writeIndex(map.getPath("-index", Paths.get("index.json")));
 		}
-		
+
 		if (map.hasFlag("-locations")) {
 			index.writeLoc(map.getPath("-locations", Paths.get("locations.json")));
-			
+
 		}
-		
-		
-		
+
 	}
 
 }

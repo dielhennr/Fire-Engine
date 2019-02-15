@@ -16,7 +16,7 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> locations;
-	
+
 	/**
 	 * Initializes the index.
 	 */
@@ -35,12 +35,12 @@ public class InvertedIndex {
 	 * @return true if this index did not already contain this word and position
 	 */
 	public boolean add(String word, String file, int position) {
-		
+
 		locations.put(file, locations.getOrDefault(file, 0) + 1);
 		index.putIfAbsent(word, new TreeMap<String, TreeSet<Integer>>());
 		index.get(word).putIfAbsent(file, new TreeSet<Integer>());
 		return index.get(word).get(file).add(position);
-		
+
 	}
 
 	/**
@@ -67,7 +67,6 @@ public class InvertedIndex {
 		return changed;
 	}
 
-	
 	/**
 	 * Writes the Inverted Index with JSONWriter
 	 * 
@@ -81,7 +80,7 @@ public class InvertedIndex {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Writes the locations with JSONWriter
 	 * 
@@ -95,7 +94,6 @@ public class InvertedIndex {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * Returns the number of words stored in the index.
@@ -136,7 +134,7 @@ public class InvertedIndex {
 		}
 		return false;
 	}
-	
+
 	// TODO Add additional methods for all levels of nesting
 
 	/**
@@ -146,7 +144,5 @@ public class InvertedIndex {
 	public String toString() {
 		return this.index.toString();
 	}
-
-	
 
 }

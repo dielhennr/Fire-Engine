@@ -19,8 +19,8 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  */
 public class TextFileStemmer {
 
-	//Stores files with the number of words in them.
-	
+	// Stores files with the number of words in them.
+
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
@@ -48,7 +48,7 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-		
+
 		List<String> output = new ArrayList<String>();
 
 		for (String word : TextParser.parse(line)) {
@@ -70,10 +70,10 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-		
+
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()))) {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
-				
+
 				String line;
 				while ((line = br.readLine()) != null) {
 					List<String> stemmedLine = stemLine(line);
@@ -82,12 +82,12 @@ public class TextFileStemmer {
 							out.write(e + " ");
 						} catch (IOException e1) {
 						}
-					});	
+					});
 					out.newLine();
 				}
-				
+
 			}
-		}	
+		}
 	}
 
 	/**

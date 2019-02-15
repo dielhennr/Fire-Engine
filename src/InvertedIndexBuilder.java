@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class InvertedIndexBuilder {
 
-
 	/**
 	 * Builds an InvertedIndex object from a list of files
 	 * 
@@ -39,11 +38,7 @@ public class InvertedIndexBuilder {
 				e.printStackTrace();
 			}
 		}
-		
-		
 
 	}
-
-	
 
 }
