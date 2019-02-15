@@ -135,7 +135,6 @@ public class InvertedIndex {
 		return false;
 	}
 
-	// TODO Add additional methods for all levels of nesting
 
 	/**
 	 * Returns a string representation of this index.
