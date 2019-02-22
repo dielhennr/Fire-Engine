@@ -8,22 +8,25 @@ import java.util.List;
 
 /**
  * Builds a data structure that stores words and their positions in files.
- * 
+ *
  * @author dielhennr
  */
 public class InvertedIndexBuilder {
-
+	// TODO Make static if keep this approach
 	/**
 	 * Builds an InvertedIndex object from a list of files
-	 * 
+	 *
 	 * @param files
 	 * @param index
 	 */
 	public void build(ArrayList<Path> files, InvertedIndex index) {
 
 		for (Path file : files) {
-			File f = file.toFile();
+			File f = file.toFile(); // TODO Avoid converting to file
 			int counter = 0;
+
+			// TODO Use the Files class
+			// TODO Set UTF8 as the character class
 			try (BufferedReader w = new BufferedReader(new FileReader(f))) {
 
 				String line;

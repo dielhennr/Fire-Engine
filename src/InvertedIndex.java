@@ -1,12 +1,12 @@
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Data structure to store strings and their positions.
- * 
+ *
  * @author dielhennr
  */
 public class InvertedIndex {
@@ -15,6 +15,8 @@ public class InvertedIndex {
 	 * Stores a mapping of words to the positions the words were found.
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+
+	// TODO Javadoc
 	private final TreeMap<String, Integer> locations;
 
 	/**
@@ -35,13 +37,15 @@ public class InvertedIndex {
 	 * @return true if this index did not already contain this word and position
 	 */
 	public boolean add(String word, String file, int position) {
-
+		// TODO Possible locations is incremented even if a word was not added
 		locations.put(file, locations.getOrDefault(file, 0) + 1);
 		index.putIfAbsent(word, new TreeMap<String, TreeSet<Integer>>());
 		index.get(word).putIfAbsent(file, new TreeSet<Integer>());
 		return index.get(word).get(file).add(position);
 
 	}
+
+	// TODO Change Path parameter to String parameter
 
 	/**
 	 * Adds the array of words at once, assuming the first word in the array is at
@@ -67,9 +71,11 @@ public class InvertedIndex {
 		return changed;
 	}
 
+	// TODO Decide on a better exception strategy
+
 	/**
 	 * Writes the Inverted Index with JSONWriter
-	 * 
+	 *
 	 * @return index
 	 */
 	public void writeIndex(Path outputFile) {
@@ -83,10 +89,10 @@ public class InvertedIndex {
 
 	/**
 	 * Writes the locations with JSONWriter
-	 * 
+	 *
 	 * @return index
 	 */
-	public void writeLoc(Path outputFile) {
+	public void writeLoc(Path outputFile) { // TODO Avoid the abbreviation
 		try {
 			PrettyJSONWriter.asObject(this.locations, outputFile);
 		} catch (IOException e) {
@@ -103,6 +109,8 @@ public class InvertedIndex {
 	public int words() {
 		return index.size();
 	}
+
+	// TODO Extend words() to other levels of nesting
 
 	/**
 	 * Tests whether the index contains the specified word.

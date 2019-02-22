@@ -13,7 +13,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * This class contains methods for stemming text.
- * 
+ *
  * @author dielhennr
  *
  */
@@ -52,6 +52,7 @@ public class TextFileStemmer {
 		List<String> output = new ArrayList<String>();
 
 		for (String word : TextParser.parse(line)) {
+			// TODO output.add(stemmer.stem(word).toString());
 			output.add((String) stemmer.stem(word));
 		}
 
@@ -70,6 +71,16 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
+		/* TODO
+		try (
+				BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()));
+				BufferedWriter out = Files.newBufferedWriter(outputFile)) {
+
+		}
+		catch () {
+
+		}
+		*/
 
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()))) {
 			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
@@ -81,6 +92,7 @@ public class TextFileStemmer {
 						try {
 							out.write(e + " ");
 						} catch (IOException e1) {
+							// TODO Noooooooo!
 						}
 					});
 					out.newLine();

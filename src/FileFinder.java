@@ -7,14 +7,14 @@ import java.util.ArrayList;
 /**
  * A class that recursively traverses a given directory and returns all text
  * files.
- * 
+ *
  * @author dielhennr
  */
 public class FileFinder {
 
 	/**
 	 * Checks if the path is a path to a text file.
-	 * 
+	 *
 	 * @param file
 	 * @return true is file is a text file
 	 */
@@ -29,9 +29,9 @@ public class FileFinder {
 	/**
 	 * Takes a path to a directory as input and returns a list of paths to text
 	 * files within this directory.
-	 * 
+	 *
 	 * @param directory The directory being searched
-	 * 
+	 *
 	 */
 	public static ArrayList<Path> traverse(Path directory) {
 
@@ -39,6 +39,7 @@ public class FileFinder {
 		try {
 			traverse(directory, pathList);
 		} catch (IOException e) {
+			// TODO Make a little more useful
 			System.err.println("problem searching directory");
 		}
 		return pathList;
@@ -46,7 +47,7 @@ public class FileFinder {
 
 	/**
 	 * Recursive helper method for traverse
-	 * 
+	 *
 	 * @param directory The directory being searched
 	 * @param pathList  The list of paths to text files
 	 */

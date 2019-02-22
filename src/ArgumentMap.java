@@ -3,6 +3,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO Be consistent with the blank line formatting
+
 /**
  * Parses and stores command-line arguments into simple key = value pairs.
  *
@@ -76,7 +78,7 @@ public class ArgumentMap {
 		}
 
 		arg = arg.trim();
-		return (arg.length() > 1 && arg.startsWith("-"));
+		return arg.length() > 1 && arg.startsWith("-");
 	}
 
 	/**
@@ -188,6 +190,7 @@ public class ArgumentMap {
 	 */
 	public Path getPath(String flag) {
 		Path path = null;
+		// TODO Try to avoid accessing the map twice here
 		if (map.get(flag) != null) {
 			path = Paths.get(map.get(flag));
 		}
