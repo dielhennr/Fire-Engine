@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Driver class
- * 
- * @author dielhennr
+ *
+ * @author dielhennr // TODO Add full name here
  */
 public class Driver {
 
@@ -23,6 +23,7 @@ public class Driver {
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
 
+			// TODO Files.exists(inFile)
 			if (inFile.toFile().exists()) {
 
 				ArrayList<Path> files = FileFinder.traverse(inFile);
@@ -31,6 +32,7 @@ public class Driver {
 				builder.build(files, index);
 
 			}
+			// TODO else let user know path was invalid
 		}
 
 		if (map.hasFlag("-index")) {
