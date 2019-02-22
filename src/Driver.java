@@ -27,29 +27,37 @@ public class Driver {
 
 			if (Files.exists(inFile)) {
 				List<Path> files = null;
-				
+
 				try {
 					files = TextFileFinder.list(inFile);
-				} 
-				catch (IOException ioe) {
-					System.err.println("Issue finding files");
+				} catch (IOException ioe) {
+					System.err.println("Issue finding a file");
 				}
-				
-				InvertedIndexBuilder builder = new InvertedIndexBuilder();
-				builder.build(files, index);
 
-			}
-			else {
+				try {
+					InvertedIndexBuilder.build(files, index);
+				} catch (IOException ioe) {
+					System.err.println("Issue reading a file");
+				}
+			} else {
 				System.err.println("The provided path is invalid, it does not exist");
 			}
 		}
 
 		if (map.hasFlag("-index")) {
-			index.writeIndex(map.getPath("-index", Paths.get("index.json")));
+			try {
+				index.writeIndex(map.getPath("-index", Paths.get("index.json")));
+			} catch (IOException ioe) {
+				System.err.println("Issue writing output to the specified -index file");
+			}
 		}
 
 		if (map.hasFlag("-locations")) {
-			index.writeLoc(map.getPath("-locations", Paths.get("locations.json")));
+			try {
+				index.writeLocations(map.getPath("-locations", Paths.get("locations.json")));
+			} catch (IOException ioe) {
+				System.err.println("Issue writing output to the specified -locations file");
+			}
 
 		}
 

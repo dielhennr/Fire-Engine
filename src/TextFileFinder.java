@@ -18,13 +18,13 @@ import java.util.stream.Stream;
 public class TextFileFinder {
 
 	/**
-	 * A lambda function that returns true if the path is a file that ends in a .txt or .text extension
-	 * (case-insensitive).
+	 * A lambda function that returns true if the path is a file that ends in a .txt
+	 * or .text extension (case-insensitive).
 	 *
 	 * @see Files#isRegularFile(Path, java.nio.file.LinkOption...)
 	 */
-	public static final Predicate<Path> TEXT_EXT = (file) -> Files.isRegularFile(file) && 
-			(file.toString().toLowerCase().endsWith(".txt") || file.toString().toLowerCase().endsWith(".text"));
+	public static final Predicate<Path> TEXT_EXT = (file) -> Files.isRegularFile(file)
+			&& (file.toString().toLowerCase().endsWith(".txt") || file.toString().toLowerCase().endsWith(".text"));
 
 	/**
 	 * Returns a stream of text files, following any symbolic links encountered.
@@ -38,12 +38,14 @@ public class TextFileFinder {
 	 * @see FileVisitOption#FOLLOW_LINKS
 	 *
 	 * @see Files#walk(Path, FileVisitOption...)
-	 * @see Files#find(Path, int, java.util.function.BiPredicate, FileVisitOption...)
+	 * @see Files#find(Path, int, java.util.function.BiPredicate,
+	 *      FileVisitOption...)
 	 *
 	 * @see Integer#MAX_VALUE
 	 */
 	public static Stream<Path> find(Path start) throws IOException {
-		return Files.find(start, Integer.MAX_VALUE, (path, attribute) -> TEXT_EXT.test(path), FileVisitOption.FOLLOW_LINKS);
+		return Files.find(start, Integer.MAX_VALUE, (path, attribute) -> TEXT_EXT.test(path),
+				FileVisitOption.FOLLOW_LINKS);
 	}
 
 	/**

@@ -261,9 +261,7 @@ public class PrettyJSONWriter {
 	 * @see System#lineSeparator()
 	 *
 	 * @see #indent(int, Writer)
-	 * @see #quote(String, Writer)
-	 *
-	 * @see #asDoubleNestedObject(TreeMap<String, TreeSet<Integer>>, Writer, int)
+	 * @see #quote(String, Writer)	
 	 */
 	public static void asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
 			int level) throws IOException {

@@ -4,11 +4,18 @@ import java.util.regex.Pattern;
 /**
  * This class contains various methods for manipulating text.
  * 
- * @author dielhennr
+ * @author Ryan Dielhenn
  */
 public class TextParser {
 
+	/**
+	 * Regex to split a line
+	 */
 	public static final Pattern SPLIT_REGEX = Pattern.compile("(?U)\\p{Space}+");
+	
+	/**
+	 * Regex to clean a line
+	 */
 	public static final Pattern CLEAN_REGEX = Pattern.compile("(?U)[^\\p{Alpha}\\p{Space}]+");
 
 	/**

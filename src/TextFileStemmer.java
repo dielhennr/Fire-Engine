@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,22 +65,23 @@ public class TextFileStemmer {
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
 		try (
-				BufferedReader reader = Files.newBufferedReader(inputFile);
-				BufferedWriter writer = Files.newBufferedWriter(outputFile) ) {
+				BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
+				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
 
-				String line;
-				while ((line = reader.readLine()) != null) {
-					List<String> stemmedLine = stemLine(line);
-					stemmedLine.stream().forEach(e -> {
-						try {
-							writer.write(e + " ");
-						} catch (IOException e1) {
-							//Ask Sophie why this needs try/catch even if the exception is thrown in method declaration
-							System.err.println("Could not write a word to the output file");
-						}
-					});
-					writer.newLine();
-				}
+			String line;
+			while ((line = reader.readLine()) != null) {
+				List<String> stemmedLine = stemLine(line);
+				stemmedLine.stream().forEach(e -> {
+					try {
+						writer.write(e + " ");
+					} catch (IOException e1) {
+						// Ask Sophie why this needs try/catch even if the exception is thrown in method
+						// declaration
+						System.err.println("Could not write a word to the output file");
+					}
+				});
+				writer.newLine();
+			}
 		}
 	}
 
