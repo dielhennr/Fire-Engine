@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,8 +18,6 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  */
 public class TextFileStemmer {
 
-	// Stores files with the number of words in them.
-
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
@@ -33,7 +30,6 @@ public class TextFileStemmer {
 	 * @see #stemLine(String, Stemmer)
 	 */
 	public static List<String> stemLine(String line) {
-		// This is provided for you.
 		return stemLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
 	}
 
@@ -48,14 +44,10 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-
 		List<String> output = new ArrayList<String>();
-
 		for (String word : TextParser.parse(line)) {
-			// TODO output.add(stemmer.stem(word).toString());
-			output.add((String) stemmer.stem(word));
+			output.add(stemmer.stem(word).toString());
 		}
-
 		return output;
 	}
 
@@ -71,34 +63,23 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-		/* TODO
 		try (
-				BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()));
-				BufferedWriter out = Files.newBufferedWriter(outputFile)) {
-
-		}
-		catch () {
-
-		}
-		*/
-
-		try (BufferedReader br = new BufferedReader(new FileReader(inputFile.toFile()))) {
-			try (BufferedWriter out = Files.newBufferedWriter(outputFile)) {
+				BufferedReader reader = Files.newBufferedReader(inputFile);
+				BufferedWriter writer = Files.newBufferedWriter(outputFile) ) {
 
 				String line;
-				while ((line = br.readLine()) != null) {
+				while ((line = reader.readLine()) != null) {
 					List<String> stemmedLine = stemLine(line);
 					stemmedLine.stream().forEach(e -> {
 						try {
-							out.write(e + " ");
+							writer.write(e + " ");
 						} catch (IOException e1) {
-							// TODO Noooooooo!
+							//Ask Sophie why this needs try/catch even if the exception is thrown in method declaration
+							System.err.println("Could not write a word to the output file");
 						}
 					});
-					out.newLine();
+					writer.newLine();
 				}
-
-			}
 		}
 	}
 
