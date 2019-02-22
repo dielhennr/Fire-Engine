@@ -1,11 +1,14 @@
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Driver class
+ * Parses the command-line arguments to build and use an in-memory search engine
+ * from files or the web.
  *
- * @author dielhennr // TODO Add full name here
+ * @author Ryan Dielhenn
  */
 public class Driver {
 
@@ -16,23 +19,29 @@ public class Driver {
 	 * @param args the command-line arguments to parse
 	 */
 	public static void main(String[] args) {
-
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
 
-			// TODO Files.exists(inFile)
-			if (inFile.toFile().exists()) {
-
-				ArrayList<Path> files = FileFinder.traverse(inFile);
-
+			if (Files.exists(inFile)) {
+				List<Path> files = null;
+				
+				try {
+					files = TextFileFinder.list(inFile);
+				} 
+				catch (IOException ioe) {
+					System.err.println("Issue finding files");
+				}
+				
 				InvertedIndexBuilder builder = new InvertedIndexBuilder();
 				builder.build(files, index);
 
 			}
-			// TODO else let user know path was invalid
+			else {
+				System.err.println("The provided path is invalid, it does not exist");
+			}
 		}
 
 		if (map.hasFlag("-index")) {

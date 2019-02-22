@@ -14,7 +14,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 /**
  * This class contains methods for stemming text.
  *
- * @author dielhennr
+ * @author Ryan Dielhenn
  *
  */
 public class TextFileStemmer {

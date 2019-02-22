@@ -3,12 +3,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO Be consistent with the blank line formatting
-
 /**
  * Parses and stores command-line arguments into simple key = value pairs.
  *
- * @author dielhennr
+ * @author Ryan Dielhenn
  */
 
 public class ArgumentMap {
@@ -22,7 +20,6 @@ public class ArgumentMap {
 	 * Initializes this argument map.
 	 */
 	public ArgumentMap() {
-
 		this.map = new HashMap<String, String>();
 	}
 
@@ -34,7 +31,6 @@ public class ArgumentMap {
 	 * @param args
 	 */
 	public ArgumentMap(String[] args) {
-		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
 		this();
 		parse(args);
 	}
@@ -46,7 +42,6 @@ public class ArgumentMap {
 	 * @param args the command line arguments to parse
 	 */
 	public void parse(String[] args) {
-
 		for (int i = 0; i < args.length; i++) {
 			if (isFlag(args[i])) {
 				if (i != args.length - 1 && isValue(args[i + 1])) {
@@ -109,7 +104,6 @@ public class ArgumentMap {
 	 * @return number of unique flags
 	 */
 	public int numFlags() {
-
 		return map.size();
 	}
 
@@ -130,7 +124,6 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag is mapped to a non-null value
 	 */
 	public boolean hasValue(String flag) {
-
 		return map.get(flag) != null;
 	}
 
@@ -140,7 +133,6 @@ public class ArgumentMap {
 	 * @return true if the map is empty
 	 */
 	public boolean isEmpty() {
-
 		return this.map.isEmpty();
 	}
 
@@ -153,9 +145,7 @@ public class ArgumentMap {
 	 *         there is no mapping for the flag
 	 */
 	public String getString(String flag) {
-
 		return map.get(flag);
-
 	}
 
 	/**
@@ -169,7 +159,6 @@ public class ArgumentMap {
 	 *         if there is no mapping for the flag
 	 */
 	public String getString(String flag, String defaultValue) {
-		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
 		String value = getString(flag);
 		return value == null ? defaultValue : value;
 	}
@@ -190,9 +179,9 @@ public class ArgumentMap {
 	 */
 	public Path getPath(String flag) {
 		Path path = null;
-		// TODO Try to avoid accessing the map twice here
-		if (map.get(flag) != null) {
-			path = Paths.get(map.get(flag));
+		String flagValue = map.get(flag);
+		if (flagValue != null) {
+			path = Paths.get(flagValue);
 		}
 		return path;
 	}
@@ -212,14 +201,12 @@ public class ArgumentMap {
 	 *         default value if there is no valid mapping for the flag
 	 */
 	public Path getPath(String flag, Path defaultValue) {
-		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
 		Path value = getPath(flag);
 		return value == null ? defaultValue : value;
 	}
 
 	@Override
 	public String toString() {
-		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
 		return this.map.toString();
 	}
 
@@ -230,7 +217,6 @@ public class ArgumentMap {
 	 * @param args the command-line arguments to parse
 	 */
 	public static void main(String[] args) {
-		// Modify as needed to debug code
 		var map = new ArgumentMap(args);
 		System.out.println(map);
 	}

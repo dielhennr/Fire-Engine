@@ -3,13 +3,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Builds a data structure that stores words and their positions in files.
  *
- * @author dielhennr
+ * @author Ryan Dielhenn
  */
 public class InvertedIndexBuilder {
 	// TODO Make static if keep this approach
@@ -19,7 +18,7 @@ public class InvertedIndexBuilder {
 	 * @param files
 	 * @param index
 	 */
-	public void build(ArrayList<Path> files, InvertedIndex index) {
+	public void build(List<Path> files, InvertedIndex index) {
 
 		for (Path file : files) {
 			File f = file.toFile(); // TODO Avoid converting to file

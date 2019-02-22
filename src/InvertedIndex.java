@@ -7,7 +7,7 @@ import java.util.TreeSet;
 /**
  * Data structure to store strings and their positions.
  *
- * @author dielhennr
+ * @author Ryan Dielhenn
  */
 public class InvertedIndex {
 
