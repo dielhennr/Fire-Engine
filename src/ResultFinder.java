@@ -40,7 +40,6 @@ public class ResultFinder {
 	 * @throws IOException
 	 */
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
-		
 		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
