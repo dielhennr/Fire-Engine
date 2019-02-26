@@ -263,7 +263,7 @@ public class PrettyJSONWriter {
 	 * @see System#lineSeparator()
 	 *
 	 * @see #indent(int, Writer)
-	 * @see #quote(String, Writer)	
+	 * @see #quote(String, Writer)
 	 */
 	public static void asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
 			int level) throws IOException {
@@ -285,7 +285,7 @@ public class PrettyJSONWriter {
 		writer.write("}");
 		writer.toString();
 	}
-	
+
 	/**
 	 * Writes the nested map of elements formatted as a nested pretty JSON object to
 	 * the specified file.
@@ -296,8 +296,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see #asResultObject(TreeMap, Writer, int)
 	 */
-	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
-			throws IOException {
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asResultObject(elements, writer, 0);
@@ -338,10 +337,10 @@ public class PrettyJSONWriter {
 	 * @see System#lineSeparator()
 	 *
 	 * @see #indent(int, Writer)
-	 * @see #quote(String, Writer)	
+	 * @see #quote(String, Writer)
 	 */
-	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
-			int level) throws IOException {
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+			throws IOException {
 		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
 		writer.write("{");
 		writer.write(System.lineSeparator());
@@ -353,7 +352,7 @@ public class PrettyJSONWriter {
 			writer.write(": ");
 			writer.write("[");
 			ArrayList<SearchResult> results = elements.get(elem);
-			if (results !=  null) {
+			if (results != null) {
 				for (SearchResult result : results) {
 					writer.write(System.lineSeparator());
 					indent(writer, level + 2);
@@ -386,19 +385,17 @@ public class PrettyJSONWriter {
 			writer.write(System.lineSeparator());
 			indent(writer, level + 1);
 			writer.write("]");
-			
+
 			if (!elem.equals(elements.lastKey())) {
 				writer.write(",");
 			}
 			writer.write(System.lineSeparator());
 		}
 		indent(writer, level);
-		
-		
+
 		writer.write("}");
 		writer.toString();
 	}
-
 
 	/**
 	 * Writes the {@code \t} tab symbol by the number of times specified.

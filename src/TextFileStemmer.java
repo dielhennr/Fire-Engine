@@ -52,7 +52,7 @@ public class TextFileStemmer {
 		}
 		return output;
 	}
-	
+
 	/**
 	 * Returns a set of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
@@ -98,8 +98,7 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-		try (
-				BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
+		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
 				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
 
 			String line;

@@ -12,31 +12,32 @@ import java.util.TreeSet;
  *
  */
 public class ResultFinder {
-	
+
 	/**
 	 * Reference to index so we can perform searches.
 	 */
 	private final InvertedIndex index;
-	
+
 	/**
 	 * Queries mapped to search results found from search
 	 */
 	private final TreeMap<String, ArrayList<SearchResult>> queryMap;
-	
+
 	/**
 	 * Constructor
+	 * 
 	 * @param index
 	 */
 	public ResultFinder(InvertedIndex index) {
 		this.index = index;
 		this.queryMap = new TreeMap<String, ArrayList<SearchResult>>();
 	}
-	
+
 	/**
 	 * Parses a query file and builds a map of queries to list of search results
 	 * 
 	 * @param queryFile
-	 * @param exact    
+	 * @param exact
 	 * @throws IOException
 	 */
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
@@ -51,33 +52,32 @@ public class ResultFinder {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Searches the inverted index given a specified query and search type
 	 * 
 	 * @param line
-	 * @param exact 
+	 * @param exact
 	 */
 	public void addEntry(TreeSet<String> line, boolean exact) {
 		if (!line.isEmpty()) {
 			String query = String.join(" ", line);
 			if (exact) {
 				queryMap.put(query, index.exactSearch(line));
-			}
-			else {
+			} else {
 				queryMap.put(query, index.partialSearch(line));
 			}
 		}
 	}
-	
+
 	/**
 	 * Writes mapping of queries to search results to .json format
 	 * 
 	 * @param outputFile
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void writeResults(Path outputFile) throws IOException {
 		PrettyJSONWriter.asResultObject(this.queryMap, outputFile);
 	}
-	
+
 }

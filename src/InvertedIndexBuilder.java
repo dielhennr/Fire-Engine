@@ -17,7 +17,7 @@ public class InvertedIndexBuilder {
 	 *
 	 * @param files
 	 * @param index
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void build(List<Path> files, InvertedIndex index) throws IOException {
 		for (Path file : files) {
@@ -39,5 +39,5 @@ public class InvertedIndexBuilder {
 		}
 
 	}
-
+	
 }
