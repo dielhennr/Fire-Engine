@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -192,19 +193,23 @@ public class InvertedIndex {
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 		
-		for (String word : line) {
-			if (index.containsKey(word)) {
-				for (String file : index.get(word).keySet()) {
-					if (!resultMap.containsKey(file)) {
-						SearchResult result = new SearchResult(file, this.numPositions(word, file), this.locations.get(file));
-						results.add(result);
-						resultMap.put(file, result);
+		for (String query : line) {
+			for (Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.entrySet()) {
+				if (entry.getKey().startsWith(query)) {
+					for (String file : entry.getValue().keySet()) {
+						if (!resultMap.containsKey(file)) {
+							SearchResult result = new SearchResult(file, this.numPositions(query, file), this.locations.get(file));
+							results.add(result);
+							resultMap.put(file, result);
+						}
+						else {
+							resultMap.get(file).updateCount(this.numPositions(query,file));
+						}
 					}
-					else {
-						resultMap.get(file).updateCount(this.numPositions(word,file));
-					}
+					
 				}
 			}
+			
 		}
 		
 		Collections.sort(results);
