@@ -61,15 +61,16 @@ public class Driver {
 
 		}
 		
-		if (map.hasFlag("-query") && map.hasValue("-query") && !(index.numWords() == 0)) {
-			ResultFinder searchResults  = new ResultFinder(index);
-			
+		
+		ResultFinder searchResults  = new ResultFinder(index); 
+		if (map.hasFlag("-query") && map.hasValue("-query")) {	
 			try {
 				searchResults.addQueries(map.getPath("-query"), map.hasFlag("-exact"));
 			} catch (IOException ioe) {
 				System.err.println("Issue reading query file");
 			}
-			
+		}
+		if (map.hasFlag("-results")) {
 			try {
 				searchResults.writeResults(map.getPath("-results" , Paths.get("results.json")));
 			} catch (IOException ioe) {

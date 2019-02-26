@@ -102,6 +102,14 @@ public class InvertedIndex {
 	}
 	
 	/**
+	 * Returns true if index is empty
+	 * @return true if empty
+	 */
+	public boolean empty() {
+		return this.index.size() == 0;
+	}
+	
+	/**
 	 * Returns the number of locations stored in the index for a given word.
 	 * 
 	 * @param word word to look for
@@ -147,15 +155,6 @@ public class InvertedIndex {
 		return false;
 	}
 
-
-	/**
-	 * Returns a string representation of this index.
-	 */
-	@Override
-	public String toString() {
-		return this.index.toString();
-	}
-
 	/**
 	 * Searches for queries in the inverted index and builds a list of SearchResults
 	 * 
@@ -185,9 +184,38 @@ public class InvertedIndex {
 		return results;
 	}
 
+	/**
+	 * @param line
+	 * @return results list of search results
+	 */
 	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
+		
+		for (String word : line) {
+			if (index.containsKey(word)) {
+				for (String file : index.get(word).keySet()) {
+					if (!resultMap.containsKey(file)) {
+						SearchResult result = new SearchResult(file, this.numPositions(word, file), this.locations.get(file));
+						results.add(result);
+						resultMap.put(file, result);
+					}
+					else {
+						resultMap.get(file).updateCount(this.numPositions(word,file));
+					}
+				}
+			}
+		}
+		
+		Collections.sort(results);
+		return results;
 	}
 
+	/**
+	 * Returns a string representation of this index.
+	 */
+	@Override
+	public String toString() {
+		return this.index.toString();
+	}
 }
