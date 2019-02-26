@@ -162,13 +162,18 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Searches for words in the inverted index that exactly match a query
+	 * Searches for words in the inverted index that match the queries exactly
 	 * 
 	 * @param line queries to search for
 	 * @return results list of SearchResults
 	 */
 	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
+		//List of all results found
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		/*
+		 * Only one search result per file. HashMap allows us to check if we already stored that file
+		 * so that the result's query count can be updated if another query is found in the file.
+		 */
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 
 		for (String word : line) {
@@ -191,13 +196,18 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Searches for words in the inverted index that start with a query
+	 * Searches for words in the inverted index that start with a given query
 	 * 
 	 * @param line queries to search for
 	 * @return results list of search results
 	 */
 	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
+		//List of all results found
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		/*
+		 * Only one search result per file. HashMap allows us to check if we already stored that file
+		 * so that the result's query count can be updated if another query is found in the file.
+		 */
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 
 		for (String query : line) {

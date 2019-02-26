@@ -8,8 +8,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
+ * A class that builds a mapping of search queries to search results
+ * 
  * @author Ryan Dielhenn
- *
  */
 public class ResultFinder {
 

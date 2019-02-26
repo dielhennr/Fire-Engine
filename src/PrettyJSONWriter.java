@@ -309,7 +309,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to use
 	 * @return a {@link String} containing the elements in pretty JSON format
 	 *
-	 * @see #asTripleNestedResultObject(TreeMap, Writer, int)
+	 * @see #asResultObject(TreeMap, Writer, int)
 	 */
 	public static String asResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
