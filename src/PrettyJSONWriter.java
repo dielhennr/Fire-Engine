@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -283,6 +284,68 @@ public class PrettyJSONWriter {
 		writer.write("}");
 		writer.toString();
 	}
+	
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asTripleNestedResultObject(TreeMap, Writer, int)
+	 */
+	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
+			throws IOException {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asTripleNestedResultObject(elements, writer, 0);
+		}
+	}
+
+	/**
+	 * Returns the elements as a nested pretty JSON object.
+	 *
+	 * @param elements the elements to use
+	 * @return a {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asTripleNestedResultObject(TreeMap, Writer, int)
+	 */
+	public static String asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
+		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
+		try {
+			StringWriter writer = new StringWriter();
+			asTripleNestedResultObject(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)	
+	 */
+	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
+			int level) throws IOException {
+		writer.write("{");
+		writer.write("}");
+		writer.toString();
+	}
+
 
 	/**
 	 * Writes the {@code \t} tab symbol by the number of times specified.
