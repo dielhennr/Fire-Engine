@@ -74,13 +74,13 @@ public class SearchResult {
 	 */
 	public int compareTo(SearchResult result) {
 		if (this.score == result.getScore()) {
-			if (this.wordCount == result.getWordCount()) {
+			if (this.queryCount == result.getQueryCount()) {
 				if (this.location.compareTo(result.getLocation()) == 0) {
 					return 0;
 				}
 				return this.location.compareTo(result.getLocation()) < 0 ? -1 : 1;
 			}
-			return this.wordCount < result.getWordCount() ? -1 : 1;
+			return this.queryCount < result.getQueryCount() ? -1 : 1;
 			
 		}
 		return this.score < result.getScore() ? -1 : 1;
