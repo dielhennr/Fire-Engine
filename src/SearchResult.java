@@ -3,7 +3,7 @@
  * 
  * @author Ryan Dielhenn
  */
-public class SearchResult {
+public class SearchResult implements Comparable<SearchResult> {
 	
 	//File the query was found in
 	private String location;
@@ -72,6 +72,7 @@ public class SearchResult {
 	 * @param result 
 	 * @return -1 if this is less than result, 0 if equal, 1 if this is greater than result
 	 */
+	@Override
 	public int compareTo(SearchResult result) {
 		if (this.score == result.getScore()) {
 			if (this.queryCount == result.getQueryCount()) {
