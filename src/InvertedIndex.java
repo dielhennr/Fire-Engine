@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -151,6 +152,16 @@ public class InvertedIndex {
 	@Override
 	public String toString() {
 		return this.index.toString();
+	}
+
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
