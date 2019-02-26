@@ -70,13 +70,13 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * Compares search result objects by score, then word count, then location
 	 * 
 	 * @param result 
-	 * @return -1 if this is less than result, 0 if equal, 1 if this is greater than result
+	 * @return 1 if this is less than result, 0 if equal, -1 if this is greater than result
 	 */
 	@Override
 	public int compareTo(SearchResult result) {
 		if (this.score == result.getScore()) {
 			if (this.queryCount == result.getQueryCount()) {
-				return this.location.compareTo(result.getLocation()) < 0 ? -1 : 1;
+				return this.location.compareTo(result.getLocation());
 			}
 			return this.queryCount < result.getQueryCount() ? 1 : -1;
 			

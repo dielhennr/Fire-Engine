@@ -24,9 +24,8 @@ public class ResultFinder {
 	private final TreeMap<String, ArrayList<SearchResult>> queryMap;
 	
 	/**
+	 * Constructor
 	 * @param index
-	 * @param queryFile
-	 * @param exact
 	 */
 	public ResultFinder(InvertedIndex index) {
 		this.index = index;
@@ -34,9 +33,10 @@ public class ResultFinder {
 	}
 	
 	/**
-	 * Builds a tree set
+	 * Parses a query file and builds a map of queries to list of search results
+	 * 
 	 * @param queryFile
-	 * @param exact 
+	 * @param exact    
 	 * @throws IOException
 	 */
 	public void addQueries(Path queryFile, boolean exact) throws IOException {
@@ -54,6 +54,8 @@ public class ResultFinder {
 	}
 	
 	/**
+	 * Searches the inverted index given a specified query and search type
+	 * 
 	 * @param line
 	 * @param exact 
 	 */
@@ -70,6 +72,8 @@ public class ResultFinder {
 	}
 	
 	/**
+	 * Writes mapping of queries to search results to .json format
+	 * 
 	 * @param outputFile
 	 * @throws IOException 
 	 */
