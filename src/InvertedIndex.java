@@ -198,12 +198,12 @@ public class InvertedIndex {
 				if (entry.getKey().startsWith(query)) {
 					for (String file : entry.getValue().keySet()) {
 						if (!resultMap.containsKey(file)) {
-							SearchResult result = new SearchResult(file, this.numPositions(query, file), this.locations.get(file));
+							SearchResult result = new SearchResult(file, this.numPositions(entry.getKey(), file), this.locations.get(file));
 							results.add(result);
 							resultMap.put(file, result);
 						}
 						else {
-							resultMap.get(file).updateCount(this.numPositions(query,file));
+							resultMap.get(file).updateCount(this.numPositions(entry.getKey(),file));
 						}
 					}
 					
