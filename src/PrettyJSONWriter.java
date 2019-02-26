@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -341,8 +342,72 @@ public class PrettyJSONWriter {
 	 */
 	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
 			int level) throws IOException {
-		writer.write("{");
-		writer.write("}");
+		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
+		writer.write("[");
+		writer.write(System.lineSeparator());
+
+		for (String elem : elements.keySet()) {
+
+			indent(writer, level + 1);
+			writer.write("{");
+			writer.write(System.lineSeparator());
+			indent(writer, level + 2);
+			quote("queries", writer);
+			writer.write(": ");
+			quote(elem, writer);
+			writer.write(",");
+			writer.write(System.lineSeparator());
+			indent(writer, level + 2);
+			quote("results", writer);
+			writer.write(": ");
+			writer.write("[");
+			ArrayList<SearchResult> results = elements.get(elem);
+			if (results !=  null) {
+				for (SearchResult result : results) {
+					writer.write(System.lineSeparator());
+					indent(writer, level + 3);
+					writer.write("{");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 4);
+					quote("where", writer);
+					writer.write(": ");
+					quote(result.getLocation(), writer);
+					writer.write(",");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 4);
+					quote("count", writer);
+					writer.write(": ");
+					writer.write(result.getQueryCount());
+					writer.write(",");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 4);
+					quote("score", writer);
+					writer.write(": ");
+					writer.write(FORMATTER.format(result.getScore()));
+					writer.write(System.lineSeparator());
+					indent(writer, level + 3);
+					writer.write("}");
+					if (!result.equals(results.get(results.size() - 1))) {
+						writer.write(",");
+					}
+				}
+			}
+			writer.write(System.lineSeparator());
+			indent(writer, level + 2);
+			writer.write("]");
+			writer.write(System.lineSeparator());
+			indent(writer, level + 1);
+			writer.write("}");
+			
+			if (!elem.equals(elements.lastKey())) {
+				writer.write(",");
+			}
+			writer.write(System.lineSeparator());
+		}
+		indent(writer, level);
+		
+		
+		writer.write("]");
 		writer.toString();
 	}
 

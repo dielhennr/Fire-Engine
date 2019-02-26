@@ -61,7 +61,7 @@ public class Driver {
 
 		}
 		
-		if (map.hasFlag("-query") && map.hasValue("-query")) {
+		if (map.hasFlag("-query") && map.hasValue("-query") && !(index.numWords() == 0)) {
 			ResultFinder searchResults  = new ResultFinder(index);
 			
 			try {

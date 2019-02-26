@@ -154,9 +154,24 @@ public class InvertedIndex {
 		return this.index.toString();
 	}
 
+	/**
+	 * Searches for queries in the inverted index and builds a list of SearchResults
+	 * 
+	 * @param line queries to search for
+	 * @return results list of SearchResults
+	 */
 	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		
+		for (String word : line) {
+			if (index.containsKey(word)) {
+				for (String file : index.get(word).keySet()) {
+					results.add(new SearchResult(file, this.numPositions(word,file), this.locations.get(file)));
+				}
+			}
+		}
+		
+		return results;
 	}
 
 	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
