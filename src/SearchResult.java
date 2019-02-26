@@ -17,7 +17,6 @@ public class SearchResult implements Comparable<SearchResult> {
 	//Score of search result obtained by queryCount/wordCount
 	private double score;
 	
-	
 	/**
 	 * @param location location 
 	 * @param queryCount

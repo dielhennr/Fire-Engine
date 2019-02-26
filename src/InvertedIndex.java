@@ -157,7 +157,7 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Searches for queries in the inverted index and builds a list of SearchResults
+	 * Searches for words in the inverted index that exactly match a query
 	 * 
 	 * @param line queries to search for
 	 * @return results list of SearchResults
@@ -186,7 +186,9 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param line
+	 * Searches for words in the inverted index that start with a query
+	 * 
+	 * @param line queries to search for
 	 * @return results list of search results
 	 */
 	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {

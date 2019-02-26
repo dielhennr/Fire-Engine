@@ -69,7 +69,6 @@ public class ResultFinder {
 		}
 	}
 	
-	
 	/**
 	 * @param outputFile
 	 * @throws IOException 

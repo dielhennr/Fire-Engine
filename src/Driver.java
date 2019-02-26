@@ -61,7 +61,6 @@ public class Driver {
 
 		}
 		
-		
 		ResultFinder searchResults  = new ResultFinder(index); 
 		if (map.hasFlag("-query") && map.hasValue("-query")) {	
 			try {
