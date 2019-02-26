@@ -64,7 +64,7 @@ public class Driver {
 		ResultFinder searchResults  = new ResultFinder(index); 
 		if (map.hasFlag("-query") && map.hasValue("-query")) {	
 			try {
-				searchResults.addQueries(map.getPath("-query"), map.hasFlag("-exact"));
+				searchResults.parseQueries(map.getPath("-query"), map.hasFlag("-exact"));
 			} catch (IOException ioe) {
 				System.err.println("Issue reading query file");
 			}

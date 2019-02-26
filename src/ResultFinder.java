@@ -39,13 +39,13 @@ public class ResultFinder {
 	 * @param exact    
 	 * @throws IOException
 	 */
-	public void addQueries(Path queryFile, boolean exact) throws IOException {
+	public void parseQueries(Path queryFile, boolean exact) throws IOException {
 		
 		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				TreeSet<String> words = TextFileStemmer.stemQueryLine(line);
-				addLine(words, exact);
+				addEntry(words, exact);
 			}
 
 		} catch (IOException e) {
@@ -59,7 +59,7 @@ public class ResultFinder {
 	 * @param line
 	 * @param exact 
 	 */
-	public void addLine(TreeSet<String> line, boolean exact) {
+	public void addEntry(TreeSet<String> line, boolean exact) {
 		if (!line.isEmpty()) {
 			String query = String.join(" ", line);
 			if (exact) {
