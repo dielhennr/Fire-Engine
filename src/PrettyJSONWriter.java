@@ -343,49 +343,40 @@ public class PrettyJSONWriter {
 	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
 			int level) throws IOException {
 		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
-		writer.write("[");
+		writer.write("{");
 		writer.write(System.lineSeparator());
 
 		for (String elem : elements.keySet()) {
 
 			indent(writer, level + 1);
-			writer.write("{");
-			writer.write(System.lineSeparator());
-			indent(writer, level + 2);
-			quote("queries", writer);
-			writer.write(": ");
 			quote(elem, writer);
-			writer.write(",");
-			writer.write(System.lineSeparator());
-			indent(writer, level + 2);
-			quote("results", writer);
 			writer.write(": ");
 			writer.write("[");
 			ArrayList<SearchResult> results = elements.get(elem);
 			if (results !=  null) {
 				for (SearchResult result : results) {
 					writer.write(System.lineSeparator());
-					indent(writer, level + 3);
+					indent(writer, level + 2);
 					writer.write("{");
 					writer.write(System.lineSeparator());
-					indent(writer, level + 4);
+					indent(writer, level + 3);
 					quote("where", writer);
 					writer.write(": ");
 					quote(result.getLocation(), writer);
 					writer.write(",");
 					writer.write(System.lineSeparator());
-					indent(writer, level + 4);
+					indent(writer, level + 3);
 					quote("count", writer);
 					writer.write(": ");
-					writer.write(result.getQueryCount());
+					writer.write(Integer.toString(result.getQueryCount()));
 					writer.write(",");
 					writer.write(System.lineSeparator());
-					indent(writer, level + 4);
+					indent(writer, level + 3);
 					quote("score", writer);
 					writer.write(": ");
 					writer.write(FORMATTER.format(result.getScore()));
 					writer.write(System.lineSeparator());
-					indent(writer, level + 3);
+					indent(writer, level + 2);
 					writer.write("}");
 					if (!result.equals(results.get(results.size() - 1))) {
 						writer.write(",");
@@ -393,11 +384,8 @@ public class PrettyJSONWriter {
 				}
 			}
 			writer.write(System.lineSeparator());
-			indent(writer, level + 2);
-			writer.write("]");
-			writer.write(System.lineSeparator());
 			indent(writer, level + 1);
-			writer.write("}");
+			writer.write("]");
 			
 			if (!elem.equals(elements.lastKey())) {
 				writer.write(",");
@@ -407,7 +395,7 @@ public class PrettyJSONWriter {
 		indent(writer, level);
 		
 		
-		writer.write("]");
+		writer.write("}");
 		writer.toString();
 	}
 

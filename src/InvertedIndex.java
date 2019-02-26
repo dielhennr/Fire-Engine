@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -162,15 +164,24 @@ public class InvertedIndex {
 	 */
 	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 		
 		for (String word : line) {
 			if (index.containsKey(word)) {
 				for (String file : index.get(word).keySet()) {
-					results.add(new SearchResult(file, this.numPositions(word,file), this.locations.get(file)));
+					if (!resultMap.containsKey(file)) {
+						SearchResult result = new SearchResult(file, this.numPositions(word, file), this.locations.get(file));
+						results.add(result);
+						resultMap.put(file, result);
+					}
+					else {
+						resultMap.get(file).updateCount(this.numPositions(word,file));
+					}
 				}
 			}
 		}
 		
+		Collections.sort(results);
 		return results;
 	}
 
