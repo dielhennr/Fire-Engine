@@ -13,7 +13,14 @@ import java.util.TreeSet;
  */
 public class ResultFinder {
 	
+	/**
+	 * Reference to index so we can perform searches.
+	 */
 	private final InvertedIndex index;
+	
+	/**
+	 * Queries mapped to search results found from search
+	 */
 	private final TreeMap<String, ArrayList<SearchResult>> queryMap;
 	
 	/**
