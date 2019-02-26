@@ -294,13 +294,13 @@ public class PrettyJSONWriter {
 	 * @param path     the path to the file write to output
 	 * @throws IOException if the writer encounters any issues
 	 *
-	 * @see #asTripleNestedResultObject(TreeMap, Writer, int)
+	 * @see #asResultObject(TreeMap, Writer, int)
 	 */
-	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
 			throws IOException {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-			asTripleNestedResultObject(elements, writer, 0);
+			asResultObject(elements, writer, 0);
 		}
 	}
 
@@ -312,11 +312,11 @@ public class PrettyJSONWriter {
 	 *
 	 * @see #asTripleNestedResultObject(TreeMap, Writer, int)
 	 */
-	public static String asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
+	public static String asResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
 		try {
 			StringWriter writer = new StringWriter();
-			asTripleNestedResultObject(elements, writer, 0);
+			asResultObject(elements, writer, 0);
 			return writer.toString();
 		} catch (IOException e) {
 			return null;
@@ -340,7 +340,7 @@ public class PrettyJSONWriter {
 	 * @see #indent(int, Writer)
 	 * @see #quote(String, Writer)	
 	 */
-	public static void asTripleNestedResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
 			int level) throws IOException {
 		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
 		writer.write("{");

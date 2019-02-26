@@ -75,7 +75,7 @@ public class ResultFinder {
 	 * @throws IOException 
 	 */
 	public void writeResults(Path outputFile) throws IOException {
-		PrettyJSONWriter.asTripleNestedResultObject(this.queryMap, outputFile);
+		PrettyJSONWriter.asResultObject(this.queryMap, outputFile);
 	}
 	
 }
