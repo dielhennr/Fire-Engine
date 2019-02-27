@@ -46,7 +46,7 @@ public class ResultFinder {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				TreeSet<String> words = TextFileStemmer.stemQueryLine(line);
-				addEntry(words, exact);
+				addQuery(words, exact);
 			}
 
 		} catch (IOException e) {
@@ -55,12 +55,13 @@ public class ResultFinder {
 	}
 
 	/**
-	 * Searches the inverted index given a specified query and search type
+	 * Searches the inverted index given a specified query and search type.
+	 * Adds the query with its search results to the queryMap.
 	 * 
 	 * @param line
 	 * @param exact
 	 */
-	public void addEntry(TreeSet<String> line, boolean exact) {
+	public void addQuery(TreeSet<String> line, boolean exact) {
 		if (!line.isEmpty()) {
 			String query = String.join(" ", line);
 			if (exact) {
