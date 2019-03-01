@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class Driver {
 
+	// TODO Check Javadoc warnings
+
 	/**
 	 * Parses the command-line arguments to build and use an in-memory search engine
 	 * from files or the web.
@@ -21,6 +23,8 @@ public class Driver {
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
+
+		// TODO But if the -path flag is provided without a value, maybe warn the user.
 
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
@@ -58,8 +62,18 @@ public class Driver {
 			} catch (IOException ioe) {
 				System.err.println("Issue writing output to the specified -locations file");
 			}
-
 		}
+
+		/* TODO
+		if (map.hasFlag("-locations")) {
+			Path path = map.getPath("-locations", Paths.get("locations.json"));
+			try {
+				index.writeLocations(path);
+			} catch (IOException ioe) {
+				System.err.println("Issue writing output to the specified -locations file: " + path);
+			}
+		}
+		*/
 
 	}
 
