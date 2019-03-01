@@ -17,13 +17,14 @@ public class InvertedIndexBuilder {
 	 *
 	 * @param files
 	 * @param index
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void build(List<Path> files, InvertedIndex index) throws IOException {
 		for (Path file : files) {
 
 			int counter = 0;
 
+			// TODO Pull this out to its own method
 			try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 
 				String line;
@@ -40,4 +41,29 @@ public class InvertedIndexBuilder {
 
 	}
 
+	/* TODO
+	public static void build(Path file, InvertedIndex index) throws IOException {
+		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+
+			String line;
+			while ((line = w.readLine()) != null) {
+				List<String> words = TextFileStemmer.stemLine(line);
+				index.addAll(words, file.toString(), counter);
+				counter += words.size();
+			}
+
+		} catch (IOException e) {
+			throw e;
+		}
+	}
+
+	private final InvertedIndex index;
+
+	public InvertedIndexBuilder(InvertedIndex index)
+
+	public void build
+
+
+	still make a static helper method that builds 1 file
+	*/
 }
