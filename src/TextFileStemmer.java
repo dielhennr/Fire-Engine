@@ -19,6 +19,8 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  */
 public class TextFileStemmer {
 
+	// TODO Make generalized so can support both lists and sets
+
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.

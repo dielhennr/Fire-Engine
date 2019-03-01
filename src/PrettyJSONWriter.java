@@ -34,12 +34,26 @@ public class PrettyJSONWriter {
 		writer.write("[");
 		writer.write(System.lineSeparator());
 
+		/*
+		 * TODO
+		 * Have an if inside a for looking for a single test case
+		 *
+		 *
+		for (Integer elem : elements.headSet(elements.last(), false)) {
+			code for other elements with comma
+		}
+
+		code for the last element
+
+		(figure out how to handle the empty case)
+		 */
+
+
 		for (Integer elem : elements) {
 			indent(writer, level + 1);
 			writer.write(elem.toString());
 			if (!elem.equals(elements.last())) {
 				writer.write(",");
-
 			}
 			writer.write(System.lineSeparator());
 
@@ -261,7 +275,7 @@ public class PrettyJSONWriter {
 	 * @see System#lineSeparator()
 	 *
 	 * @see #indent(int, Writer)
-	 * @see #quote(String, Writer)	
+	 * @see #quote(String, Writer)
 	 */
 	public static void asDoubleNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
 			int level) throws IOException {

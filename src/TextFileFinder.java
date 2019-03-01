@@ -17,6 +17,9 @@ import java.util.stream.Stream;
  */
 public class TextFileFinder {
 
+	// TODO Could, not required, make TEXT_EXT a bi-predicate
+	// TODO Slightly ineffiecent to call file.toString().toLowerCase() twice
+
 	/**
 	 * A lambda function that returns true if the path is a file that ends in a .txt
 	 * or .text extension (case-insensitive).
@@ -61,6 +64,8 @@ public class TextFileFinder {
 		ArrayList<Path> pathList = new ArrayList<Path>();
 		TextFileFinder.find(start).forEach(e -> pathList.add(e));
 		return pathList;
+
+		// TODO return TextFileFinder.find(start).collect(Collectors.toList());
 	}
 
 	/**
