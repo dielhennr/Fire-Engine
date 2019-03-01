@@ -24,8 +24,6 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 
-		// TODO But if the -path flag is provided without a value, maybe warn the user.
-
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
 
@@ -39,32 +37,27 @@ public class Driver {
 				}
 
 				try {
-					InvertedIndexBuilder.build(files, index);
+					InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
+					builder.build(files);
 				} catch (IOException ioe) {
 					System.err.println("Issue reading a file");
 				}
 			} else {
 				System.err.println("The provided path is invalid, it does not exist");
 			}
+		} else if (map.hasFlag("-path") && !map.hasValue("-path")) {
+			System.err.println("No path provided after the -path flag");
 		}
 
 		if (map.hasFlag("-index")) {
+			Path path = map.getPath("-locations", Paths.get("locations.json"));
 			try {
-				index.writeIndex(map.getPath("-index", Paths.get("index.json")));
+				index.writeIndex(path);
 			} catch (IOException ioe) {
-				System.err.println("Issue writing output to the specified -index file");
+				System.err.println("Issue writing output to the specified -index file: " + path);
 			}
 		}
 
-		if (map.hasFlag("-locations")) {
-			try {
-				index.writeLocations(map.getPath("-locations", Paths.get("locations.json")));
-			} catch (IOException ioe) {
-				System.err.println("Issue writing output to the specified -locations file");
-			}
-		}
-
-		/* TODO
 		if (map.hasFlag("-locations")) {
 			Path path = map.getPath("-locations", Paths.get("locations.json"));
 			try {
@@ -73,7 +66,6 @@ public class Driver {
 				System.err.println("Issue writing output to the specified -locations file: " + path);
 			}
 		}
-		*/
 
 	}
 

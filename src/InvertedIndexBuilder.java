@@ -11,38 +11,38 @@ import java.util.List;
  * @author Ryan Dielhenn
  */
 public class InvertedIndexBuilder {
+	
+	private final InvertedIndex index;
 
+	/**
+	 * Constructor
+	 * @param index
+	 */
+	public InvertedIndexBuilder(InvertedIndex index) {
+		this.index = index;
+	}
+	
 	/**
 	 * Builds an InvertedIndex object from a list of files
 	 *
 	 * @param files
+	 * @throws IOException
+	 */
+	public void build(List<Path> files) throws IOException {
+		for (Path file : files) {
+			InvertedIndexBuilder.buildFile(file, this.index);	
+		}
+	}
+	
+	/**
+	 * Adds stemmed words of one file to the Inverted Index
+	 * 
+	 * @param file
 	 * @param index
 	 * @throws IOException
 	 */
-	public static void build(List<Path> files, InvertedIndex index) throws IOException {
-		for (Path file : files) {
-
-			int counter = 0;
-
-			// TODO Pull this out to its own method
-			try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-
-				String line;
-				while ((line = w.readLine()) != null) {
-					List<String> words = TextFileStemmer.stemLine(line);
-					index.addAll(words, file.toString(), counter);
-					counter += words.size();
-				}
-
-			} catch (IOException e) {
-				throw e;
-			}
-		}
-
-	}
-
-	/* TODO
-	public static void build(Path file, InvertedIndex index) throws IOException {
+	public static void buildFile(Path file, InvertedIndex index) throws IOException{
+		int counter = 0;
 		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 
 			String line;
@@ -56,14 +56,4 @@ public class InvertedIndexBuilder {
 			throw e;
 		}
 	}
-
-	private final InvertedIndex index;
-
-	public InvertedIndexBuilder(InvertedIndex index)
-
-	public void build
-
-
-	still make a static helper method that builds 1 file
-	*/
 }
