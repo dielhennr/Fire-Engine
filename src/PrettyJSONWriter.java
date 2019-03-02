@@ -34,29 +34,16 @@ public class PrettyJSONWriter {
 		writer.write("[");
 		writer.write(System.lineSeparator());
 
-		/*
-		 * TODO
-		 * Have an if inside a for looking for a single test case
-		 *
-		 *
-		for (Integer elem : elements.headSet(elements.last(), false)) {
-			code for other elements with comma
-		}
-
-		code for the last element
-
-		(figure out how to handle the empty case)
-		 */
-
-
-		for (Integer elem : elements) {
-			indent(writer, level + 1);
-			writer.write(elem.toString());
-			if (!elem.equals(elements.last())) {
+		if (!elements.isEmpty()) {
+			for (Integer elem : elements.headSet(elements.last(), false)) {
+				indent(writer, level + 1);
+				writer.write(elem.toString());
 				writer.write(",");
+				writer.write(System.lineSeparator());
 			}
+			indent(writer, level + 1);
+			writer.write(elements.last().toString());
 			writer.write(System.lineSeparator());
-
 		}
 		indent(writer, level);
 		writer.write("]");
@@ -110,17 +97,21 @@ public class PrettyJSONWriter {
 
 		writer.write("{");
 		writer.write(System.lineSeparator());
-		for (String elem : elements.keySet()) {
-			indent(writer, level + 1);
-			quote(elem, writer);
-			writer.write(": " + elements.get(elem).toString());
-			if (!elem.equals(elements.lastKey())) {
+
+		if (!elements.isEmpty()) {
+			for (String elem : elements.headMap(elements.lastKey(), false).keySet()) {
+				indent(writer, level + 1);
+				quote(elem, writer);
+				writer.write(": " + elements.get(elem).toString());
 				writer.write(",");
+				writer.write(System.lineSeparator());
+
 			}
+			indent(writer, level + 1);
+			quote(elements.lastKey(), writer);
+			writer.write(": " + elements.get(elements.lastKey()).toString());
 			writer.write(System.lineSeparator());
-
 		}
-
 		writer.write("}");
 
 	}
@@ -173,14 +164,19 @@ public class PrettyJSONWriter {
 
 		writer.write("{");
 		writer.write(System.lineSeparator());
-		for (String elem : elements.keySet()) {
-			indent(writer, level + 1);
-			quote(elem, writer);
-			writer.write(": ");
-			asArray(elements.get(elem), writer, level + 1);
-			if (!elem.equals(elements.lastKey())) {
+		if (!elements.isEmpty()) {
+			for (String elem : elements.headMap(elements.lastKey(), false).keySet()) {
+				indent(writer, level + 1);
+				quote(elem, writer);
+				writer.write(": ");
+				asArray(elements.get(elem), writer, level + 1);
 				writer.write(",");
+				writer.write(System.lineSeparator());
 			}
+			indent(writer, level + 1);
+			quote(elements.lastKey(), writer);
+			writer.write(": ");
+			asArray(elements.get(elements.lastKey()), writer, level + 1);
 			writer.write(System.lineSeparator());
 		}
 		indent(writer, level);
@@ -282,18 +278,25 @@ public class PrettyJSONWriter {
 		writer.write("{");
 		writer.write(System.lineSeparator());
 
-		for (String elem : elements.keySet()) {
+		if (!elements.isEmpty()) {
+			for (String elem : elements.headMap(elements.lastKey(), false).keySet()) {
 
-			indent(writer, level + 1);
-			quote(elem, writer);
-			writer.write(": ");
-			asNestedObject(elements.get(elem), writer, level + 1);
-			if (!elem.equals(elements.lastKey())) {
-				writer.write(",");
+				indent(writer, level + 1);
+				quote(elem, writer);
+				writer.write(": ");
+				asNestedObject(elements.get(elem), writer, level + 1);
+				if (!elem.equals(elements.lastKey())) {
+					writer.write(",");
+				}
+				writer.write(System.lineSeparator());
 			}
+			indent(writer, level + 1);
+			quote(elements.lastKey(), writer);
+			writer.write(": ");
+			asNestedObject(elements.get(elements.lastKey()), writer, level + 1);
 			writer.write(System.lineSeparator());
+			indent(writer, level);
 		}
-		indent(writer, level);
 		writer.write("}");
 		writer.toString();
 	}

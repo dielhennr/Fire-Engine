@@ -11,17 +11,18 @@ import java.util.List;
  * @author Ryan Dielhenn
  */
 public class InvertedIndexBuilder {
-	
+
 	private final InvertedIndex index;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param index
 	 */
 	public InvertedIndexBuilder(InvertedIndex index) {
 		this.index = index;
 	}
-	
+
 	/**
 	 * Builds an InvertedIndex object from a list of files
 	 *
@@ -30,10 +31,10 @@ public class InvertedIndexBuilder {
 	 */
 	public void build(List<Path> files) throws IOException {
 		for (Path file : files) {
-			InvertedIndexBuilder.buildFile(file, this.index);	
+			InvertedIndexBuilder.buildFile(file, this.index);
 		}
 	}
-	
+
 	/**
 	 * Adds stemmed words of one file to the Inverted Index
 	 * 
@@ -41,7 +42,7 @@ public class InvertedIndexBuilder {
 	 * @param index
 	 * @throws IOException
 	 */
-	public static void buildFile(Path file, InvertedIndex index) throws IOException{
+	public static void buildFile(Path file, InvertedIndex index) throws IOException {
 		int counter = 0;
 		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 

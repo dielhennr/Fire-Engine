@@ -5,8 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -18,8 +21,6 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  *
  */
 public class TextFileStemmer {
-
-	// TODO Make generalized so can support both lists and sets
 
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
@@ -47,11 +48,52 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-		List<String> output = new ArrayList<String>();
-		for (String word : TextParser.parse(line)) {
-			output.add(stemmer.stem(word).toString());
-		}
-		return output;
+		return TextFileStemmer.stemLineStream(line)
+				.map(word -> (String) stemmer.stem(word))
+				.collect(Collectors.toList());
+		
+	}
+	
+	/**
+	 * Returns a set of cleaned and stemmed words parsed from the provided line.
+	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
+	 *
+	 * @param line the line of words to clean, split, and stem
+	 * @return set of cleaned and stemmed words
+	 *
+	 * @see SnowballStemmer
+	 * @see SnowballStemmer.ALGORITHM#ENGLISH
+	 * @see #stemLine(String, Stemmer)
+	 */
+	public static Set<String> stemQueryLine(String line) {
+		return stemQueryLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
+	}
+
+	/**
+	 * Returns a set of cleaned and stemmed words parsed from the provided line.
+	 *
+	 * @param line    the line of words to clean, split, and stem
+	 * @param stemmer the stemmer to use
+	 * @return set of cleaned and stemmed words
+	 *
+	 * @see Stemmer#stem(CharSequence)
+	 * @see TextParser#parse(String)
+	 */
+	public static Set<String> stemQueryLine(String line, Stemmer stemmer) {
+		return TextFileStemmer.stemLineStream(line)
+				.map(word -> (String) stemmer.stem(word))
+				.collect(Collectors.toSet());
+		
+	}
+	
+	/**
+	 * Returns a stream of a parsed line
+	 * 
+	 * @param line
+	 * @return stream of words in line
+	 */
+	public static Stream<String> stemLineStream(String line) {
+		return Arrays.stream(TextParser.parse(line));
 	}
 
 	/**

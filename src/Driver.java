@@ -50,7 +50,7 @@ public class Driver {
 		}
 
 		if (map.hasFlag("-index")) {
-			Path path = map.getPath("-locations", Paths.get("locations.json"));
+			Path path = map.getPath("-index", Paths.get("index.json"));
 			try {
 				index.writeIndex(path);
 			} catch (IOException ioe) {
