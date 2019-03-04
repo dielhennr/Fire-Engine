@@ -23,7 +23,7 @@ public class TextFileFinder {
 	 *
 	 * @see Files#isRegularFile(Path, java.nio.file.LinkOption...)
 	 */
-	public static final BiPredicate<Path, Boolean> TEXT_EXT = (file, fileType) -> { 
+	public static final BiPredicate<Path, Boolean> TEXT_EXT = (file, fileType) -> {
 		String lowerCaseFile = file.toString().toLowerCase();
 		return fileType && (lowerCaseFile.endsWith(".txt") || lowerCaseFile.endsWith(".text"));
 	};

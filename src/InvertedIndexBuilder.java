@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class InvertedIndexBuilder {
 
+	/**
+	 * Stores a reference to an InvertedIndex
+	 */
 	private final InvertedIndex index;
 
 	/**

@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class Driver {
 
-	// TODO Check Javadoc warnings
-
 	/**
 	 * Parses the command-line arguments to build and use an in-memory search engine
 	 * from files or the web.

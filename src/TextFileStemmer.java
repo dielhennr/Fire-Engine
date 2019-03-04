@@ -24,13 +24,15 @@ public class TextFileStemmer {
 
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
-	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
+	 * Uses the English
+	 * {@link opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM} for
+	 * stemming.
 	 *
 	 * @param line the line of words to clean, split, and stem
 	 * @return list of cleaned and stemmed words
 	 *
 	 * @see SnowballStemmer
-	 * @see SnowballStemmer.ALGORITHM#ENGLISH
+	 * @see opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM#ENGLISH
 	 * @see #stemLine(String, Stemmer)
 	 */
 	public static List<String> stemLine(String line) {
@@ -48,21 +50,21 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-		return TextFileStemmer.stemLineStream(line)
-				.map(word -> (String) stemmer.stem(word))
+		return TextFileStemmer.stemLineStream(line).map(word -> (String) stemmer.stem(word))
 				.collect(Collectors.toList());
-		
 	}
-	
+
 	/**
 	 * Returns a set of cleaned and stemmed words parsed from the provided line.
-	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
+	 * Uses the English
+	 * {@link opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM} for
+	 * stemming.
 	 *
 	 * @param line the line of words to clean, split, and stem
 	 * @return set of cleaned and stemmed words
 	 *
 	 * @see SnowballStemmer
-	 * @see SnowballStemmer.ALGORITHM#ENGLISH
+	 * @see opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM#ENGLISH
 	 * @see #stemLine(String, Stemmer)
 	 */
 	public static Set<String> stemQueryLine(String line) {
@@ -80,12 +82,10 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static Set<String> stemQueryLine(String line, Stemmer stemmer) {
-		return TextFileStemmer.stemLineStream(line)
-				.map(word -> (String) stemmer.stem(word))
+		return TextFileStemmer.stemLineStream(line).map(word -> (String) stemmer.stem(word))
 				.collect(Collectors.toSet());
-		
 	}
-	
+
 	/**
 	 * Returns a stream of a parsed line
 	 * 
@@ -108,8 +108,7 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-		try (
-				BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
+		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
 				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
 
 			String line;

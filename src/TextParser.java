@@ -12,7 +12,7 @@ public class TextParser {
 	 * Regex to split a line
 	 */
 	public static final Pattern SPLIT_REGEX = Pattern.compile("(?U)\\p{Space}+");
-	
+
 	/**
 	 * Regex to clean a line
 	 */
