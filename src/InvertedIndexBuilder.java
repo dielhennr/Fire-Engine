@@ -4,6 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import opennlp.tools.stemmer.Stemmer;
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * Builds a data structure that stores words and their positions in files.
@@ -37,12 +41,16 @@ public class InvertedIndexBuilder {
 			InvertedIndexBuilder.buildFile(file, this.index);
 		}
 	}
-	
-	/* TODO
+
+	/**
+	 * Builds an InvertedIndex object from a given starting path
+	 * 
+	 * @param start
+	 * @throws IOException
+	 */
 	public void build(Path start) throws IOException {
 		build(TextFileFinder.list(start));
 	}
-	*/
 
 	/**
 	 * Adds stemmed words of one file to the Inverted Index
@@ -52,24 +60,15 @@ public class InvertedIndexBuilder {
 	 * @throws IOException
 	 */
 	public static void buildFile(Path file, InvertedIndex index) throws IOException {
-		int counter = 0;
+		AtomicInteger count = new AtomicInteger();
+		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 
 			String line;
 			while ((line = w.readLine()) != null) {
-				/* TODO
-				 * 1) Every single line creates a stemmer object.
-				 * Create 1 stemmer per file and reuse
-				 * 
-				 * 2) TextParser loops through the line.
-				 * TextFileStemmer loops through the line.
-				 * addAll loops through the line again.
-				 * 
-				 * reduce by 1 loop so you dont have the temporary list storage
-				 */
-				List<String> words = TextFileStemmer.stemLine(line);
-				index.addAll(words, file.toString(), counter);
-				counter += words.size();
+				TextFileStemmer.stemLineStream(line, stemmer).forEach(word -> {
+					index.add(word, file.toString(), count.getAndIncrement() + 1);
+				});
 			}
 
 		} catch (IOException e) {

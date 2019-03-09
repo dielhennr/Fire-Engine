@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,51 +49,19 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static List<String> stemLine(String line, Stemmer stemmer) {
-		return TextFileStemmer.stemLineStream(line).map(word -> (String) stemmer.stem(word))
+		return TextFileStemmer.stemLineStream(line, stemmer).map(word -> stemmer.stem(word).toString())
 				.collect(Collectors.toList());
 	}
 
 	/**
-	 * Returns a set of cleaned and stemmed words parsed from the provided line.
-	 * Uses the English
-	 * {@link opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM} for
-	 * stemming.
-	 *
-	 * @param line the line of words to clean, split, and stem
-	 * @return set of cleaned and stemmed words
-	 *
-	 * @see SnowballStemmer
-	 * @see opennlp.tools.stemmer.snowball.SnowballStemmer.ALGORITHM#ENGLISH
-	 * @see #stemLine(String, Stemmer)
-	 */
-	public static Set<String> stemQueryLine(String line) {
-		return stemQueryLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
-	}
-
-	/**
-	 * Returns a set of cleaned and stemmed words parsed from the provided line.
-	 *
-	 * @param line    the line of words to clean, split, and stem
-	 * @param stemmer the stemmer to use
-	 * @return set of cleaned and stemmed words
-	 *
-	 * @see Stemmer#stem(CharSequence)
-	 * @see TextParser#parse(String)
-	 */
-	public static Set<String> stemQueryLine(String line, Stemmer stemmer) {
-		// TODO Downcast! stemmer.stem(word).toString()
-		return TextFileStemmer.stemLineStream(line).map(word -> (String) stemmer.stem(word))
-				.collect(Collectors.toSet());
-	}
-
-	/**
-	 * Returns a stream of a parsed line
+	 * Returns a stream of a stemmed and parsed line
 	 * 
 	 * @param line
+	 * @param stemmer
 	 * @return stream of words in line
 	 */
-	public static Stream<String> stemLineStream(String line) {
-		return Arrays.stream(TextParser.parse(line));
+	public static Stream<String> stemLineStream(String line, Stemmer stemmer) {
+		return Arrays.stream(TextParser.parse(line)).map(word -> stemmer.stem(word).toString());
 	}
 
 	/**
@@ -115,17 +82,10 @@ public class TextFileStemmer {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				List<String> stemmedLine = stemLine(line);
-				
-				// TODO Here might not make sense to use a stream
-				stemmedLine.stream().forEach(e -> {
-					try {
-						writer.write(e + " ");
-					} catch (IOException e1) {
-						// Ask Sophie why this needs try/catch even if the exception is thrown in method
-						// declaration
-						System.err.println("Could not write a word to the output file");
-					}
-				});
+
+				for (String word : stemmedLine) {
+					writer.write(word + " ");
+				}
 				writer.newLine();
 			}
 		}

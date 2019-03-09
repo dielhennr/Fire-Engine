@@ -72,7 +72,7 @@ public class ArgumentMap {
 			return false;
 		}
 
-		arg = arg.trim(); // TODO arg.strip();
+		arg = arg.strip();
 		return arg.length() > 1 && arg.startsWith("-");
 	}
 
@@ -94,7 +94,7 @@ public class ArgumentMap {
 			return false;
 		}
 
-		arg = arg.trim();
+		arg = arg.strip();
 		return !(arg.isEmpty() || arg.startsWith("-"));
 	}
 

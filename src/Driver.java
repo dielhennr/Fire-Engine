@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * Parses the command-line arguments to build and use an in-memory search engine
@@ -26,17 +25,10 @@ public class Driver {
 			Path inFile = map.getPath("-path");
 
 			if (Files.exists(inFile)) {
-				List<Path> files = null;
-
-				try {
-					files = TextFileFinder.list(inFile);
-				} catch (IOException ioe) {
-					System.err.println("Issue finding a file");
-				}
 
 				try {
 					InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
-					builder.build(files);
+					builder.build(inFile);
 				} catch (IOException ioe) {
 					System.err.println("Issue reading a file");
 				}
