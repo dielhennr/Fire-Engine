@@ -10,6 +10,7 @@ import java.util.Map;
  */
 
 public class ArgumentMap {
+	
 
 	/**
 	 * Stores command-line arguments in key = value pairs.
@@ -72,7 +73,7 @@ public class ArgumentMap {
 			return false;
 		}
 
-		arg = arg.trim();
+		arg = arg.strip();
 		return arg.length() > 1 && arg.startsWith("-");
 	}
 
@@ -94,7 +95,7 @@ public class ArgumentMap {
 			return false;
 		}
 
-		arg = arg.trim();
+		arg = arg.strip();
 		return !(arg.isEmpty() || arg.startsWith("-"));
 	}
 

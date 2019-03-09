@@ -104,6 +104,7 @@ public class InvertedIndex {
 		return index.size();
 	}
 
+
 	/**
 	 * Returns true if index is empty
 	 * 
@@ -155,11 +156,9 @@ public class InvertedIndex {
 	 * @return true if the word is stored in the index at the specified position
 	 */
 	public boolean contains(String word, String file) {
-		if (index.containsKey(word) && index.get(word).containsKey(file)) {
-			return true;
-		}
-		return false;
+		return (index.containsKey(word) && index.get(word).containsKey(file));
 	}
+
 
 	/**
 	 * Searches for words in the inverted index that match the queries exactly
