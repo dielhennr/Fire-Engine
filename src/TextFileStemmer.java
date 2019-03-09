@@ -82,6 +82,7 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static Set<String> stemQueryLine(String line, Stemmer stemmer) {
+		// TODO Downcast! stemmer.stem(word).toString()
 		return TextFileStemmer.stemLineStream(line).map(word -> (String) stemmer.stem(word))
 				.collect(Collectors.toSet());
 	}
@@ -114,6 +115,8 @@ public class TextFileStemmer {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				List<String> stemmedLine = stemLine(line);
+				
+				// TODO Here might not make sense to use a stream
 				stemmedLine.stream().forEach(e -> {
 					try {
 						writer.write(e + " ");

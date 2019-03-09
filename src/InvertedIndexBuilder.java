@@ -37,6 +37,12 @@ public class InvertedIndexBuilder {
 			InvertedIndexBuilder.buildFile(file, this.index);
 		}
 	}
+	
+	/* TODO
+	public void build(Path start) throws IOException {
+		build(TextFileFinder.list(start));
+	}
+	*/
 
 	/**
 	 * Adds stemmed words of one file to the Inverted Index
@@ -51,6 +57,16 @@ public class InvertedIndexBuilder {
 
 			String line;
 			while ((line = w.readLine()) != null) {
+				/* TODO
+				 * 1) Every single line creates a stemmer object.
+				 * Create 1 stemmer per file and reuse
+				 * 
+				 * 2) TextParser loops through the line.
+				 * TextFileStemmer loops through the line.
+				 * addAll loops through the line again.
+				 * 
+				 * reduce by 1 loop so you dont have the temporary list storage
+				 */
 				List<String> words = TextFileStemmer.stemLine(line);
 				index.addAll(words, file.toString(), counter);
 				counter += words.size();
