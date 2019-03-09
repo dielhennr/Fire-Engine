@@ -72,7 +72,7 @@ public class ArgumentMap {
 			return false;
 		}
 
-		arg = arg.trim();
+		arg = arg.trim(); // TODO arg.strip();
 		return arg.length() > 1 && arg.startsWith("-");
 	}
 
