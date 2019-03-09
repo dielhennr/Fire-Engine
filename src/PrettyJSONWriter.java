@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -270,6 +272,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see System#lineSeparator()
 	 *
+
 	 * @see #indent(Writer, int)
 	 * @see #quote(String, Writer)
 	 */
@@ -297,6 +300,117 @@ public class PrettyJSONWriter {
 			writer.write(System.lineSeparator());
 			indent(writer, level);
 		}
+		writer.write("}");
+		writer.toString();
+	}
+
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asResultObject(TreeMap, Writer, int)
+	 */
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asResultObject(elements, writer, 0);
+		}
+	}
+
+	/**
+	 * Returns the elements as a nested pretty JSON object.
+	 *
+	 * @param elements the elements to use
+	 * @return a {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asResultObject(TreeMap, Writer, int)
+	 */
+	public static String asResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
+		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
+		try {
+			StringWriter writer = new StringWriter();
+			asResultObject(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)
+	 */
+	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+			throws IOException {
+		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
+		writer.write("{");
+		writer.write(System.lineSeparator());
+
+		for (String elem : elements.keySet()) {
+
+			indent(writer, level + 1);
+			quote(elem, writer);
+			writer.write(": ");
+			writer.write("[");
+			ArrayList<SearchResult> results = elements.get(elem);
+			if (results != null) {
+				for (SearchResult result : results) {
+					writer.write(System.lineSeparator());
+					indent(writer, level + 2);
+					writer.write("{");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 3);
+					quote("where", writer);
+					writer.write(": ");
+					quote(result.getLocation(), writer);
+					writer.write(",");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 3);
+					quote("count", writer);
+					writer.write(": ");
+					writer.write(Integer.toString(result.getQueryCount()));
+					writer.write(",");
+					writer.write(System.lineSeparator());
+					indent(writer, level + 3);
+					quote("score", writer);
+					writer.write(": ");
+					writer.write(FORMATTER.format(result.getScore()));
+					writer.write(System.lineSeparator());
+					indent(writer, level + 2);
+					writer.write("}");
+					if (!result.equals(results.get(results.size() - 1))) {
+						writer.write(",");
+					}
+				}
+			}
+			writer.write(System.lineSeparator());
+			indent(writer, level + 1);
+			writer.write("]");
+
+			if (!elem.equals(elements.lastKey())) {
+				writer.write(",");
+			}
+			writer.write(System.lineSeparator());
+		}
+		indent(writer, level);
+
 		writer.write("}");
 		writer.toString();
 	}
@@ -378,11 +492,6 @@ public class PrettyJSONWriter {
 		indent(writer, times);
 		quote(element, writer);
 	}
-
-	/*
-	 * You may add additional methods to this class; just do not modify the
-	 * declaration of the ones already provided!
-	 */
 
 	/**
 	 * A simple main method that demonstrates this class.

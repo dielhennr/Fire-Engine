@@ -57,6 +57,22 @@ public class Driver {
 			}
 		}
 
+		ResultFinder resultFinder = new ResultFinder(index);
+		if (map.hasFlag("-query") && map.hasValue("-query")) {
+			try {
+				resultFinder.parseQueries(map.getPath("-query"), map.hasFlag("-exact"));
+			} catch (IOException ioe) {
+				System.err.println("Issue reading query file");
+			}
+		}
+		if (map.hasFlag("-results")) {
+			try {
+				resultFinder.writeResults(map.getPath("-results", Paths.get("results.json")));
+			} catch (IOException ioe) {
+				System.err.println("Issue writing search result file");
+			}
+		}
+
 	}
 
 }
