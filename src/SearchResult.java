@@ -5,22 +5,32 @@
  */
 public class SearchResult implements Comparable<SearchResult> {
 
-	// File the query was found in
+	/**
+	 * File the query was found in
+	 */
 	private String location;
 
-	// Number of times the query appears in location
+	/**
+	 * Number of times the query appears in location
+	 */
 	private int queryCount;
 
-	// Total number of words in location
+	/**
+	 * Total number of words in location
+	 */
 	private int wordCount;
 
-	// Score of search result obtained by queryCount/wordCount
+	/**
+	 * Score of search result obtained by queryCount/wordCount
+	 */
 	private double score;
 
 	/**
-	 * @param location   location
-	 * @param queryCount
-	 * @param wordCount
+	 * Constructor
+	 * 
+	 * @param location   location of query
+	 * @param queryCount number of times the query appears in location
+	 * @param wordCount  total words in location
 	 */
 	public SearchResult(String location, int queryCount, int wordCount) {
 		this.location = location;

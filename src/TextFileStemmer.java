@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.TreeSet;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -63,39 +62,6 @@ public class TextFileStemmer {
 	 */
 	public static Stream<String> stemLineStream(String line, Stemmer stemmer) {
 		return Arrays.stream(TextParser.parse(line)).map(word -> stemmer.stem(word).toString());
-	}
-
-	/**
-	 * Returns a set of cleaned and stemmed words parsed from the provided line.
-	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
-	 *
-	 * @param line the line of words to clean, split, and stem
-	 * @return list of cleaned and stemmed words
-	 *
-	 * @see SnowballStemmer
-	 * @see SnowballStemmer.ALGORITHM#ENGLISH
-	 * @see #stemQueryLine(String, Stemmer)
-	 */
-	public static TreeSet<String> stemQueryLine(String line) {
-		return stemQueryLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
-	}
-
-	/**
-	 * Returns a set of cleaned and stemmed words parsed from the provided line.
-	 *
-	 * @param line    the line of words to clean, split, and stem
-	 * @param stemmer the stemmer to use
-	 * @return list of cleaned and stemmed words
-	 *
-	 * @see Stemmer#stem(CharSequence)
-	 * @see TextParser#parse(String)
-	 */
-	public static TreeSet<String> stemQueryLine(String line, Stemmer stemmer) {
-		TreeSet<String> output = new TreeSet<String>();
-		for (String word : TextParser.parse(line)) {
-			output.add(stemmer.stem(word).toString());
-		}
-		return output;
 	}
 
 	/**

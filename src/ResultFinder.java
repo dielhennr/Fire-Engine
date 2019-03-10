@@ -6,6 +6,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import opennlp.tools.stemmer.Stemmer;
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * A class that builds a mapping of search queries to search results
@@ -42,10 +46,12 @@ public class ResultFinder {
 	 * @throws IOException
 	 */
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
+		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				TreeSet<String> words = TextFileStemmer.stemQueryLine(line);
+				TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
+						.collect(Collectors.toCollection(TreeSet::new));
 				addQuery(words, exact);
 			}
 
@@ -55,8 +61,8 @@ public class ResultFinder {
 	}
 
 	/**
-	 * Searches the inverted index given a specified query and search type.
-	 * Adds the query with its search results to the queryMap.
+	 * Searches the inverted index given a specified query and search type. Adds the
+	 * query with its search results to the queryMap.
 	 * 
 	 * @param line
 	 * @param exact

@@ -104,7 +104,6 @@ public class InvertedIndex {
 		return index.size();
 	}
 
-
 	/**
 	 * Returns true if index is empty
 	 * 
@@ -159,34 +158,26 @@ public class InvertedIndex {
 		return (index.containsKey(word) && index.get(word).containsKey(file));
 	}
 
-
 	/**
 	 * Searches for words in the inverted index that match the queries exactly
 	 * 
 	 * @param line queries to search for
 	 * @return results list of SearchResults
+	 * 
+	 * @see #searchHelper(HashMap, ArrayList, String)
 	 */
 	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
-		//List of all results found
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		/*
-		 * Only one search result per file. HashMap allows us to check if we already stored that file
-		 * so that the result's query count can be updated if another query is found in the file.
+		 * Only one search result per file. HashMap allows us to check if we already
+		 * stored that file so that the result's query count can be updated if another
+		 * query is found in the file.
 		 */
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 
 		for (String word : line) {
 			if (index.containsKey(word)) {
-				for (String file : index.get(word).keySet()) {
-					if (!resultMap.containsKey(file)) {
-						SearchResult result = new SearchResult(file, this.numPositions(word, file),
-								this.locations.get(file));
-						results.add(result);
-						resultMap.put(file, result);
-					} else {
-						resultMap.get(file).updateCount(this.numPositions(word, file));
-					}
-				}
+				searchHelper(resultMap, results, word);
 			}
 		}
 
@@ -199,36 +190,51 @@ public class InvertedIndex {
 	 * 
 	 * @param line queries to search for
 	 * @return results list of search results
+	 * 
+	 * @see #searchHelper(HashMap, ArrayList, String)
 	 */
 	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
-		//List of all results found
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		/*
-		 * Only one search result per file. HashMap allows us to check if we already stored that file
-		 * so that the result's query count can be updated if another query is found in the file.
+		 * Only one search result per file. HashMap allows us to check if we already
+		 * stored that file so that the result's query count can be updated if another
+		 * query is found in the file.
 		 */
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 
 		for (String query : line) {
-			for (Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.entrySet()) {
-				if (entry.getKey().startsWith(query)) {
-					for (String file : entry.getValue().keySet()) {
-						if (!resultMap.containsKey(file)) {
-							SearchResult result = new SearchResult(file, this.numPositions(entry.getKey(), file),
-									this.locations.get(file));
-							results.add(result);
-							resultMap.put(file, result);
-						} else {
-							resultMap.get(file).updateCount(this.numPositions(entry.getKey(), file));
-						}
-					}
-
+			for (Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.tailMap(query).entrySet()) {
+				String word = entry.getKey();
+				if (word.startsWith(query)) {
+					searchHelper(resultMap, results, word);
+				} else {
+					break;
 				}
 			}
-
 		}
+
 		Collections.sort(results);
 		return results;
+	}
+
+	/**
+	 * Helper method for partial and exact search. Adds a search result to results
+	 * for every file containing query found
+	 * 
+	 * @param resultMap
+	 * @param results
+	 * @param query
+	 */
+	public void searchHelper(HashMap<String, SearchResult> resultMap, ArrayList<SearchResult> results, String query) {
+		for (String file : index.get(query).keySet()) {
+			if (!resultMap.containsKey(file)) {
+				SearchResult result = new SearchResult(file, this.numPositions(query, file), this.locations.get(file));
+				results.add(result);
+				resultMap.put(file, result);
+			} else {
+				resultMap.get(file).updateCount(this.numPositions(query, file));
+			}
+		}
 	}
 
 	/**

@@ -272,7 +272,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see System#lineSeparator()
 	 *
-
+	 * 
 	 * @see #indent(Writer, int)
 	 * @see #quote(String, Writer)
 	 */
@@ -354,7 +354,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see System#lineSeparator()
 	 *
-	 * @see #indent(int, Writer)
+	 * @see #indent(Writer, int)
 	 * @see #quote(String, Writer)
 	 */
 	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
