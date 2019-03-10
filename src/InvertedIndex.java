@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -100,6 +104,16 @@ public class InvertedIndex {
 		return index.size();
 	}
 
+
+	/**
+	 * Returns true if index is empty
+	 * 
+	 * @return true if empty
+	 */
+	public boolean empty() {
+		return this.index.size() == 0;
+	}
+
 	/**
 	 * Returns the number of locations stored in the index for a given word.
 	 * 
@@ -145,6 +159,78 @@ public class InvertedIndex {
 		return (index.containsKey(word) && index.get(word).containsKey(file));
 	}
 
+
+	/**
+	 * Searches for words in the inverted index that match the queries exactly
+	 * 
+	 * @param line queries to search for
+	 * @return results list of SearchResults
+	 */
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
+		//List of all results found
+		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		/*
+		 * Only one search result per file. HashMap allows us to check if we already stored that file
+		 * so that the result's query count can be updated if another query is found in the file.
+		 */
+		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
+
+		for (String word : line) {
+			if (index.containsKey(word)) {
+				for (String file : index.get(word).keySet()) {
+					if (!resultMap.containsKey(file)) {
+						SearchResult result = new SearchResult(file, this.numPositions(word, file),
+								this.locations.get(file));
+						results.add(result);
+						resultMap.put(file, result);
+					} else {
+						resultMap.get(file).updateCount(this.numPositions(word, file));
+					}
+				}
+			}
+		}
+
+		Collections.sort(results);
+		return results;
+	}
+
+	/**
+	 * Searches for words in the inverted index that start with a given query
+	 * 
+	 * @param line queries to search for
+	 * @return results list of search results
+	 */
+	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
+		//List of all results found
+		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+		/*
+		 * Only one search result per file. HashMap allows us to check if we already stored that file
+		 * so that the result's query count can be updated if another query is found in the file.
+		 */
+		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
+
+		for (String query : line) {
+			for (Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.entrySet()) {
+				if (entry.getKey().startsWith(query)) {
+					for (String file : entry.getValue().keySet()) {
+						if (!resultMap.containsKey(file)) {
+							SearchResult result = new SearchResult(file, this.numPositions(entry.getKey(), file),
+									this.locations.get(file));
+							results.add(result);
+							resultMap.put(file, result);
+						} else {
+							resultMap.get(file).updateCount(this.numPositions(entry.getKey(), file));
+						}
+					}
+
+				}
+			}
+
+		}
+		Collections.sort(results);
+		return results;
+	}
+
 	/**
 	 * Returns a string representation of this index.
 	 */
@@ -152,5 +238,4 @@ public class InvertedIndex {
 	public String toString() {
 		return this.index.toString();
 	}
-
 }
