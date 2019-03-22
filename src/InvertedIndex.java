@@ -51,7 +51,7 @@ public class InvertedIndex {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Adds the array of words at once, assuming the first word in the array is at
 	 * the provided starting position
@@ -158,6 +158,9 @@ public class InvertedIndex {
 		return (index.containsKey(word) && index.get(word).containsKey(file));
 	}
 
+	// TODO helper method
+	// public ArrayList<SearchResult> search(Collection<String> queries, boolean partial)
+	
 	/**
 	 * Searches for words in the inverted index that match the queries exactly
 	 * 
@@ -166,7 +169,7 @@ public class InvertedIndex {
 	 * 
 	 * @see #searchHelper(HashMap, ArrayList, String)
 	 */
-	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) {
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) { // TODO Collection<String> queries
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		/*
 		 * Only one search result per file. HashMap allows us to check if we already
@@ -217,6 +220,7 @@ public class InvertedIndex {
 		return results;
 	}
 
+	// TODO Make private
 	/**
 	 * Helper method for partial and exact search. Adds a search result to results
 	 * for every file containing query found

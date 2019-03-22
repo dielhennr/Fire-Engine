@@ -41,7 +41,7 @@ public class ResultFinder {
 	/**
 	 * Parses a query file and builds a map of queries to list of search results
 	 * 
-	 * @param queryFile
+	 * @param queryFile TODO
 	 * @param exact
 	 * @throws IOException
 	 */
@@ -50,6 +50,7 @@ public class ResultFinder {
 		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
+				// TODO Move the stemming into addQuery
 				TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
 						.collect(Collectors.toCollection(TreeSet::new));
 				addQuery(words, exact);
@@ -59,7 +60,16 @@ public class ResultFinder {
 			throw e;
 		}
 	}
-
+	
+	/* TODO
+	public void addQuery(String line, boolean exact) {
+	// TODO Stemmer per line
+		TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
+				.collect(Collectors.toCollection(TreeSet::new));
+		what is in addQuery 
+	}
+	*/
+	
 	/**
 	 * Searches the inverted index given a specified query and search type. Adds the
 	 * query with its search results to the queryMap.
