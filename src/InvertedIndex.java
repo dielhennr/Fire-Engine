@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public class InvertedIndex {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Adds the array of words at once, assuming the first word in the array is at
 	 * the provided starting position
@@ -158,9 +159,20 @@ public class InvertedIndex {
 		return (index.containsKey(word) && index.get(word).containsKey(file));
 	}
 
-	// TODO helper method
-	// public ArrayList<SearchResult> search(Collection<String> queries, boolean partial)
-	
+	/**
+	 * Helper Method for partial and exact searches
+	 * 
+	 * @param queries - queries to search for
+	 * @param partial - boolean to represent if partial or exact search should be
+	 *                used
+	 * @return ArrayList of SearchResults
+	 * @see #partialSearch(Collection)
+	 * @see #exactSearch(Collection)
+	 */
+	public ArrayList<SearchResult> search(Collection<String> queries, boolean partial) {
+		return partial ? partialSearch(queries) : exactSearch(queries);
+	}
+
 	/**
 	 * Searches for words in the inverted index that match the queries exactly
 	 * 
@@ -169,7 +181,7 @@ public class InvertedIndex {
 	 * 
 	 * @see #searchHelper(HashMap, ArrayList, String)
 	 */
-	public ArrayList<SearchResult> exactSearch(TreeSet<String> line) { // TODO Collection<String> queries
+	public ArrayList<SearchResult> exactSearch(Collection<String> line) {
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		/*
 		 * Only one search result per file. HashMap allows us to check if we already
@@ -191,12 +203,12 @@ public class InvertedIndex {
 	/**
 	 * Searches for words in the inverted index that start with a given query
 	 * 
-	 * @param line queries to search for
+	 * @param queries queries to search for
 	 * @return results list of search results
 	 * 
 	 * @see #searchHelper(HashMap, ArrayList, String)
 	 */
-	public ArrayList<SearchResult> partialSearch(TreeSet<String> line) {
+	public ArrayList<SearchResult> partialSearch(Collection<String> queries) {
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		/*
 		 * Only one search result per file. HashMap allows us to check if we already
@@ -205,7 +217,7 @@ public class InvertedIndex {
 		 */
 		HashMap<String, SearchResult> resultMap = new HashMap<String, SearchResult>();
 
-		for (String query : line) {
+		for (String query : queries) {
 			for (Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.tailMap(query).entrySet()) {
 				String word = entry.getKey();
 				if (word.startsWith(query)) {
@@ -220,16 +232,17 @@ public class InvertedIndex {
 		return results;
 	}
 
-	// TODO Make private
 	/**
 	 * Helper method for partial and exact search. Adds a search result to results
 	 * for every file containing query found
 	 * 
-	 * @param resultMap
-	 * @param results
-	 * @param query
+	 * @param resultMap a mapping of locations to search results, if we find
+	 *                  multiple queries in the same file we update the files search
+	 *                  result instead of creating a new one
+	 * @param results   ArrayList of search results
+	 * @param query     the query we are currently searching for
 	 */
-	public void searchHelper(HashMap<String, SearchResult> resultMap, ArrayList<SearchResult> results, String query) {
+	private void searchHelper(HashMap<String, SearchResult> resultMap, ArrayList<SearchResult> results, String query) {
 		for (String file : index.get(query).keySet()) {
 			if (!resultMap.containsKey(file)) {
 				SearchResult result = new SearchResult(file, this.numPositions(query, file), this.locations.get(file));

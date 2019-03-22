@@ -20,7 +20,8 @@ public class Driver {
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
-		// TODO Move builder and finder declarations up here
+		InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
+		ResultFinder resultFinder = new ResultFinder(index);
 
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
@@ -28,7 +29,6 @@ public class Driver {
 			if (Files.exists(inFile)) {
 
 				try {
-					InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
 					builder.build(inFile);
 				} catch (IOException ioe) {
 					System.err.println("Issue reading a file");
@@ -58,7 +58,6 @@ public class Driver {
 			}
 		}
 
-		ResultFinder resultFinder = new ResultFinder(index);
 		if (map.hasFlag("-query") && map.hasValue("-query")) {
 			try {
 				resultFinder.parseQueries(map.getPath("-query"), map.hasFlag("-exact"));
@@ -66,7 +65,7 @@ public class Driver {
 				System.err.println("Issue reading query file");
 			}
 		}
-		
+
 		if (map.hasFlag("-results")) {
 			try {
 				resultFinder.writeResults(map.getPath("-results", Paths.get("results.json")));
@@ -76,26 +75,4 @@ public class Driver {
 		}
 	}
 
-	/*
-	 * TODO
-	 * ArgumentMap
-	 * InvertedIndex = null
-	 * InvertedIndexBuilder = null
-	 * ResultFinder = null
-	 * 
-	 * if (threads)
-	 * 		initialize to multi threaded versions
-	 * 
-	 * else
-	 * 		initialize to singlel threaded versions
-	 * 
-	 * 
-	 * if (path)
-	 * 
-	 * 
-	 * if (index)
-	 * 
-	 * etc.
-	 */
-	
 }

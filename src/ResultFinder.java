@@ -41,49 +41,40 @@ public class ResultFinder {
 	/**
 	 * Parses a query file and builds a map of queries to list of search results
 	 * 
-	 * @param queryFile TODO
-	 * @param exact
+	 * @param queryFile file of search terms
+	 * @param exact     whether or not we are using exact search
 	 * @throws IOException
 	 */
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
-		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+
 		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				// TODO Move the stemming into addQuery
-				TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
-						.collect(Collectors.toCollection(TreeSet::new));
-				addQuery(words, exact);
+				addQuery(line, exact);
 			}
 
 		} catch (IOException e) {
 			throw e;
 		}
 	}
-	
-	/* TODO
-	public void addQuery(String line, boolean exact) {
-	// TODO Stemmer per line
-		TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
-				.collect(Collectors.toCollection(TreeSet::new));
-		what is in addQuery 
-	}
-	*/
-	
+
 	/**
 	 * Searches the inverted index given a specified query and search type. Adds the
 	 * query with its search results to the queryMap.
 	 * 
-	 * @param line
-	 * @param exact
+	 * @param line  line to parse and search
+	 * @param exact whether or not we are using exact search
 	 */
-	public void addQuery(TreeSet<String> line, boolean exact) {
-		if (!line.isEmpty()) {
-			String query = String.join(" ", line);
+	public void addQuery(String line, boolean exact) {
+		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+		TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
+				.collect(Collectors.toCollection(TreeSet::new));
+		if (!words.isEmpty()) {
+			String query = String.join(" ", words);
 			if (exact) {
-				queryMap.put(query, index.exactSearch(line));
+				queryMap.put(query, index.exactSearch(words));
 			} else {
-				queryMap.put(query, index.partialSearch(line));
+				queryMap.put(query, index.partialSearch(words));
 			}
 		}
 	}

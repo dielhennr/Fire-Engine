@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -60,16 +59,15 @@ public class InvertedIndexBuilder {
 	 * @throws IOException
 	 */
 	public static void buildFile(Path file, InvertedIndex index) throws IOException {
-		AtomicInteger count = new AtomicInteger();
+		int count = 0;
 		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 
 			String line;
 			while ((line = w.readLine()) != null) {
-				// TODO Parse here, and then loop through the array, stem, and add
-				TextFileStemmer.stemLineStream(line, stemmer).forEach(word -> {
-					index.add(word, file.toString(), count.getAndIncrement() + 1);
-				});
+				for (String word : TextParser.parse(line)) {
+					index.add(stemmer.stem(word).toString(), file.toString(), ++count);
+				}
 			}
 
 		} catch (IOException e) {
