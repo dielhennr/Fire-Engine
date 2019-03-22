@@ -66,6 +66,7 @@ public class InvertedIndexBuilder {
 
 			String line;
 			while ((line = w.readLine()) != null) {
+				// TODO Parse here, and then loop through the array, stem, and add
 				TextFileStemmer.stemLineStream(line, stemmer).forEach(word -> {
 					index.add(word, file.toString(), count.getAndIncrement() + 1);
 				});

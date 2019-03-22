@@ -8,7 +8,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	/**
 	 * File the query was found in
 	 */
-	private String location;
+	private String location; // TODO Make final
 
 	/**
 	 * Number of times the query appears in location
@@ -18,7 +18,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	/**
 	 * Total number of words in location
 	 */
-	private int wordCount;
+	private int wordCount; // TODO Make final
 
 	/**
 	 * Score of search result obtained by queryCount/wordCount
@@ -39,6 +39,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		this.score = (double) queryCount / wordCount;
 	}
 
+	// TODO Still have to do the Javadoc description.
+	
 	/**
 	 * @return the location
 	 */
@@ -91,7 +93,6 @@ public class SearchResult implements Comparable<SearchResult> {
 				return this.location.compareTo(result.getLocation());
 			}
 			return this.queryCount < result.getQueryCount() ? 1 : -1;
-
 		}
 		return this.score < result.getScore() ? 1 : -1;
 	}
