@@ -19,15 +19,23 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
-		InvertedIndex index = new InvertedIndex();
-		InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
-		ResultFinder resultFinder = new ResultFinder(index);
-
+		InvertedIndex index = null;
+		InvertedIndexBuilder builder = null; 
+		ResultFinder resultFinder = null;
+		
+		if (map.hasFlag("-threads")) {
+			index = null;
+			builder = null;
+			resultFinder = null;	
+		} else {
+			index = new InvertedIndex();
+			builder = new InvertedIndexBuilder(index);
+			resultFinder = new ResultFinder(index);
+		}
+		
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
-
 			if (Files.exists(inFile)) {
-
 				try {
 					builder.build(inFile);
 				} catch (IOException ioe) {
