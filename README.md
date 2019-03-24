@@ -1,6 +1,6 @@
 # Fire Engine | In-Progress
 
-## Created with the help of Professor Sophie Engle of University of San Francisco
+Created with the help of Professor Sophie Engle of University of San Francisco
 
 
 
