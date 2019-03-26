@@ -27,7 +27,6 @@ public class Driver {
 			Path inFile = map.getPath("-path");
 
 			if (Files.exists(inFile)) {
-
 				try {
 					builder.build(inFile);
 				} catch (IOException ioe) {
