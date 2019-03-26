@@ -163,14 +163,14 @@ public class InvertedIndex {
 	 * Helper Method for partial and exact searches
 	 * 
 	 * @param queries - queries to search for
-	 * @param partial - boolean to represent if partial or exact search should be
+	 * @param exact  -- boolean to represent if partial or exact search should be
 	 *                used
 	 * @return ArrayList of SearchResults
 	 * @see #partialSearch(Collection)
 	 * @see #exactSearch(Collection)
 	 */
-	public ArrayList<SearchResult> search(Collection<String> queries, boolean partial) {
-		return partial ? partialSearch(queries) : exactSearch(queries);
+	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
+		return exact ? exactSearch(queries) : partialSearch(queries);
 	}
 
 	/**
