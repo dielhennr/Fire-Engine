@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
-//tests
+
 /**
  * A class that builds a mapping of search queries to search results
  * 
