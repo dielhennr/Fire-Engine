@@ -71,7 +71,7 @@ public class ResultFinder {
 				.collect(Collectors.toCollection(TreeSet::new));
 		if (!words.isEmpty()) {
 			String query = String.join(" ", words);
-				queryMap.put(query, index.search(words, exact));
+			queryMap.put(query, index.search(words, exact));
 		}
 	}
 
