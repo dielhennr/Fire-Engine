@@ -71,6 +71,8 @@ public class ResultFinder {
 				.collect(Collectors.toCollection(TreeSet::new));
 		if (!words.isEmpty()) {
 			String query = String.join(" ", words);
+			// TODO Now that you hav a search(...) method in InvertedIndex, you can:
+			// queryMap.put(query, index.search(words, exact));
 			if (exact) {
 				queryMap.put(query, index.exactSearch(words));
 			} else {

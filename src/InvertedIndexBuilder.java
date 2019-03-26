@@ -63,6 +63,17 @@ public class InvertedIndexBuilder {
 		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		try (BufferedReader w = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 
+			/*
+			 * TODO Minor: file.toString() done inside a loop. Likely the compiler optimizes this
+			 * for you, but still good practice to save the toString() result and reuse it
+			 * 
+			 * String location = file.toString();
+			 * 
+			 * for (...) {
+			 * 		index.add(stemmer.stem(word).toString(), location, ++count);
+			 * }
+			 */
+			
 			String line;
 			while ((line = w.readLine()) != null) {
 				for (String word : TextParser.parse(line)) {
