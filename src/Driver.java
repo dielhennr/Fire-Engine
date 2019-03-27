@@ -24,9 +24,9 @@ public class Driver {
 		ResultFinder resultFinder = null;
 		
 		if (map.hasFlag("-threads")) {
-			index = null;
-			builder = null;
-			resultFinder = null;	
+			index = new ThreadSafeIndex();
+			builder = new ThreadSafeIndexBuilder(index);
+			resultFinder = new ThreadSafeResultFinder(index);	
 		} else {
 			index = new InvertedIndex();
 			builder = new InvertedIndexBuilder(index);
