@@ -10,15 +10,38 @@ import java.util.List;
  * @author Ryan Dielhenn
  */
 public class ThreadSafeIndex extends InvertedIndex {
-
+	
+	 /** The lock used to protect concurrent access to the underlying data structure. */ 
+	private SimpleReadWriteLock lock;
+	
+	/**
+	 * Default constructor 
+	 */
+	public ThreadSafeIndex() {
+		super();
+		lock = new SimpleReadWriteLock();
+	}
+	
 	@Override
-	public synchronized boolean add(String word, String location, int position) {
-		return super.add(word, location, position);
+	public boolean add(String word, String location, int position) {
+		lock.writeLock().lock();
+		try {
+			return super.add(word, location, position);
+		}
+		finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized boolean addAll(List<String> words, String location, int start) {
-		return super.addAll(words, location, start);
+	public boolean addAll(List<String> words, String location, int start) {
+		lock.writeLock().lock();
+		try {
+			return super.addAll(words, location, start);
+		}
+		finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 	@Override
@@ -32,52 +55,91 @@ public class ThreadSafeIndex extends InvertedIndex {
 	}
 
 	@Override
-	public synchronized int numWords() {
-		return super.numWords();
+	public int numWords() {
+		lock.readLock().lock();
+		try {
+			return super.numWords();
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized boolean empty() {
-		return super.empty();
+	public boolean empty() {
+		lock.readLock().lock();
+		try {
+			return super.empty();
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized int numFiles(String word) {
-		return super.numFiles(word);
+	public int numFiles(String word) {
+		lock.readLock().lock();
+		try {
+			return super.numFiles(word);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized int numPositions(String word, String location) {
-		return super.numPositions(word, location);
+	public int numPositions(String word, String location) {
+		lock.readLock().lock();
+		try {
+			return super.numPositions(word, location);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized boolean contains(String word) {
-		return super.contains(word);
+	public boolean contains(String word) {
+		lock.readLock().lock();
+		try {
+			return super.contains(word);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
 	public synchronized boolean contains(String word, String file) {
-		return super.contains(word, file);
+		lock.readLock().lock();
+		try {
+			return super.contains(word, file);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
-		return super.search(queries, exact);
-	}
-	
-	@Override
-	public synchronized ArrayList<SearchResult> exactSearch(Collection<String> line) {
-		return super.exactSearch(line);
-	}
-
-	@Override
-	public synchronized ArrayList<SearchResult> partialSearch(Collection<String> queries) {
-		return super.partialSearch(queries);
+	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
+		lock.readLock().lock();
+		try {
+			return super.search(queries, exact);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized String toString() {
-		return super.toString();
+	public String toString() {
+		lock.readLock().lock();
+		try {
+			return super.toString();
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
+
 }

@@ -261,4 +261,5 @@ public class InvertedIndex {
 	public String toString() {
 		return this.index.toString();
 	}
+
 }
