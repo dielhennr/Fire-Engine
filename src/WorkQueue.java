@@ -29,7 +29,7 @@ public class WorkQueue {
 	/** The default number of threads to use when not specified. */
 	public static final int DEFAULT = 5;
 
-	/** The logger to use*/
+	/** The logger to use */
 	public static final Logger log = LogManager.getLogger(WorkQueue.class);
 
 	/**

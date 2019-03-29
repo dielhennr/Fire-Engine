@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class SimpleReadWriteLock {
 
-	/** The lock used to synchronize lock/unlock methods*/
+	/** The lock used to synchronize lock/unlock methods */
 	private final Object lock;
 
 	/** The lock used for reading. */
@@ -31,7 +31,7 @@ public class SimpleReadWriteLock {
 	/** The number of active writers; */
 	private int writers;
 
-	/** The logger to use*/
+	/** The logger to use */
 	public static final Logger log = LogManager.getLogger(SimpleReadWriteLock.class);
 
 	/**

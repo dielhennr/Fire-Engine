@@ -10,25 +10,26 @@ import java.util.List;
  * @author Ryan Dielhenn
  */
 public class ThreadSafeIndex extends InvertedIndex {
-	
-	 /** The lock used to protect concurrent access to the underlying data structure. */ 
-	private SimpleReadWriteLock lock;
-	
+
 	/**
-	 * Default constructor 
+	 * The lock used to protect concurrent access to the underlying data structure.
+	 */
+	private SimpleReadWriteLock lock;
+
+	/**
+	 * Default constructor
 	 */
 	public ThreadSafeIndex() {
 		super();
 		lock = new SimpleReadWriteLock();
 	}
-	
+
 	@Override
 	public boolean add(String word, String location, int position) {
 		lock.writeLock().lock();
 		try {
 			return super.add(word, location, position);
-		}
-		finally {
+		} finally {
 			lock.writeLock().unlock();
 		}
 	}
@@ -38,8 +39,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.writeLock().lock();
 		try {
 			return super.addAll(words, location, start);
-		}
-		finally {
+		} finally {
 			lock.writeLock().unlock();
 		}
 	}
@@ -59,8 +59,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.numWords();
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -70,8 +69,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.empty();
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -81,8 +79,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.numFiles(word);
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -92,8 +89,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.numPositions(word, location);
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -103,8 +99,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.contains(word);
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -114,8 +109,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.contains(word, file);
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -125,8 +119,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.search(queries, exact);
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -136,8 +129,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock.readLock().lock();
 		try {
 			return super.toString();
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}

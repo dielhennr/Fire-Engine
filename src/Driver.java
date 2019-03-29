@@ -20,16 +20,16 @@ public class Driver {
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = null;
-		InvertedIndexBuilder builder = null; 
+		InvertedIndexBuilder builder = null;
 		ResultFinder resultFinder = null;
-		
+
 		if (map.hasFlag("-threads")) {
 			index = new ThreadSafeIndex();
 			int threads = 5;
 			if (map.hasValue("-threads")) {
 				String tVal = map.getString("-threads");
 				try {
-					threads = Integer.parseInt(tVal); 
+					threads = Integer.parseInt(tVal);
 				} catch (NumberFormatException nfe) {
 					threads = 5;
 					System.err.println("Defaulting number of threads to 5. " + tVal + " is invalid.");
@@ -39,13 +39,13 @@ public class Driver {
 				}
 			}
 			builder = new ThreadSafeIndexBuilder(index, threads);
-			resultFinder = new ThreadSafeResultFinder(index);	
+			resultFinder = new ThreadSafeResultFinder(index);
 		} else {
 			index = new InvertedIndex();
 			builder = new InvertedIndexBuilder(index);
 			resultFinder = new ResultFinder(index);
 		}
-		
+
 		if (map.hasFlag("-path") && map.hasValue("-path")) {
 			Path inFile = map.getPath("-path");
 			if (Files.exists(inFile)) {
