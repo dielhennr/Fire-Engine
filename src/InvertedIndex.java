@@ -26,6 +26,7 @@ public class InvertedIndex {
 	 * index.
 	 */
 	private final TreeMap<String, Integer> locations;
+
 	/**
 	 * Initializes the index.
 	 */
@@ -250,6 +251,31 @@ public class InvertedIndex {
 			} else {
 				resultMap.get(file).updateCount(this.numPositions(query, file));
 			}
+		}
+	}
+
+	/**
+	 * Combines a thread's local data with the main thread's data
+	 * 
+	 * @param local - The local index to add to the main thread's index
+	 */
+	public void addLocal(InvertedIndex local) {
+		for (String word : local.index.keySet()) {
+			if (this.index.containsKey(word)) {
+				for (String location : local.index.get(word).keySet()) {
+					if (this.index.get(word).containsKey(location)) {
+						this.index.get(word).get(location).addAll(local.index.get(word).get(location));
+					} else {
+						this.index.get(word).put(location, local.index.get(word).get(location));
+					}
+				}
+			} else {
+				this.index.put(word, local.index.get(word));
+			}
+		}
+		for (String location : local.locations.keySet()) {
+			this.locations.put(location, this.locations.getOrDefault(location, 0) + local.locations.get(location));
+
 		}
 	}
 

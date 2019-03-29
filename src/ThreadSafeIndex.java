@@ -123,6 +123,19 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
+	
+	/**
+	 * @param index
+	 */
+	public void addLocal(InvertedIndex local) {
+		lock.writeLock().lock();
+		try {
+			super.addLocal(local);
+		} 
+		finally {
+			lock.writeLock().unlock();
+		}
+	}
 
 	@Override
 	public String toString() {
