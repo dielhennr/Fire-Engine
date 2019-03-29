@@ -26,7 +26,6 @@ public class InvertedIndex {
 	 * index.
 	 */
 	private final TreeMap<String, Integer> locations;
-
 	/**
 	 * Initializes the index.
 	 */

@@ -17,7 +17,7 @@ public class ThreadSafeResultFinder extends ResultFinder {
 	}
 
 	@Override
-	public synchronized void parseQueries(Path queryFile, boolean exact) throws IOException {
+	public void parseQueries(Path queryFile, boolean exact) throws IOException {
 		super.parseQueries(queryFile, exact);
 	}
 
