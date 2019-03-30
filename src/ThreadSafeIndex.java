@@ -24,6 +24,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 		lock = new SimpleReadWriteLock();
 	}
 
+	/**
+	 * @see InvertedIndex#add(String, String, int)
+	 */
 	@Override
 	public boolean add(String word, String location, int position) {
 		lock.writeLock().lock();
@@ -33,7 +36,10 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.writeLock().unlock();
 		}
 	}
-
+	
+	/**
+	 * @see InvertedIndex#addAll(List, String, int)
+	 */
 	@Override
 	public boolean addAll(List<String> words, String location, int start) {
 		lock.writeLock().lock();
@@ -43,17 +49,26 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.writeLock().unlock();
 		}
 	}
-
+	
+	/**
+	 * @see InvertedIndex#writeIndex(Path)
+	 */
 	@Override
 	public synchronized void writeIndex(Path outputFile) throws IOException {
 		super.writeIndex(outputFile);
 	}
-
+	
+	/**
+	 * @see InvertedIndex#writeLocations(Path)
+	 */
 	@Override
 	public synchronized void writeLocations(Path outputFile) throws IOException {
 		super.writeLocations(outputFile);
 	}
 
+	/**
+	 * @see InvertedIndex#numWords()
+	 */
 	@Override
 	public int numWords() {
 		lock.readLock().lock();
@@ -63,7 +78,10 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-
+	
+	/**
+	 * @see InvertedIndex#empty()
+	 */
 	@Override
 	public boolean empty() {
 		lock.readLock().lock();
@@ -74,6 +92,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 		}
 	}
 
+	/**
+	 * @see InvertedIndex#numFiles(String)
+	 */
 	@Override
 	public int numFiles(String word) {
 		lock.readLock().lock();
@@ -84,6 +105,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 		}
 	}
 
+	/**
+	 * @see InvertedIndex#numPositions(String, String)
+	 */
 	@Override
 	public int numPositions(String word, String location) {
 		lock.readLock().lock();
@@ -94,6 +118,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 		}
 	}
 
+	/**
+	 * @see InvertedIndex#contains(String)
+	 */
 	@Override
 	public boolean contains(String word) {
 		lock.readLock().lock();
@@ -103,7 +130,10 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-
+	
+	/**
+	 * @see InvertedIndex#contains(String, String)
+	 */
 	@Override
 	public synchronized boolean contains(String word, String file) {
 		lock.readLock().lock();
@@ -113,7 +143,10 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-
+	
+	/**
+	 * @see InvertedIndex#search(Collection, boolean)
+	 */
 	@Override
 	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
 		lock.readLock().lock();
@@ -125,8 +158,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 	}
 	
 	/**
-	 * @param index
+	 * @param local
 	 */
+	@Override
 	public void addLocal(InvertedIndex local) {
 		lock.writeLock().lock();
 		try {
@@ -137,6 +171,9 @@ public class ThreadSafeIndex extends InvertedIndex {
 		}
 	}
 
+	/**
+	 * @see InvertedIndex#toString()
+	 */
 	@Override
 	public String toString() {
 		lock.readLock().lock();

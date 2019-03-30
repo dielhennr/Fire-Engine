@@ -22,6 +22,7 @@ public class Driver {
 		InvertedIndex index = null;
 		InvertedIndexBuilder builder = null;
 		ResultFinder resultFinder = null;
+		WorkQueue workers = null;
 
 		if (map.hasFlag("-threads")) {
 			index = new ThreadSafeIndex();
@@ -31,15 +32,15 @@ public class Driver {
 				try {
 					threads = Integer.parseInt(tVal);
 				} catch (NumberFormatException nfe) {
-					threads = 5;
 					System.err.println("Defaulting number of threads to 5. " + tVal + " is invalid.");
 				}
 				if (threads < 1) {
 					threads = 5;
 				}
 			}
-			builder = new ThreadSafeIndexBuilder(index, threads);
-			resultFinder = new ThreadSafeResultFinder(index);
+			workers = new WorkQueue(threads);
+			builder = new ThreadSafeIndexBuilder(index, workers);
+			resultFinder = new ThreadSafeResultFinder(index, workers);
 		} else {
 			index = new InvertedIndex();
 			builder = new InvertedIndexBuilder(index);

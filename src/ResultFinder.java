@@ -26,7 +26,7 @@ public class ResultFinder {
 	/**
 	 * Queries mapped to search results found from search
 	 */
-	private final TreeMap<String, ArrayList<SearchResult>> queryMap;
+	protected final TreeMap<String, ArrayList<SearchResult>> queryMap;
 
 	/**
 	 * Constructor
