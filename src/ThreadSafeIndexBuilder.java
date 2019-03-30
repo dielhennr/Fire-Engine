@@ -24,8 +24,10 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	private final WorkQueue workers;
 
 	/**
-	 * @param index
-	 * @param workers
+	 * Constructor
+	 * 
+	 * @param index   - reference to the index we are building
+	 * @param workers - reference to worker queue
 	 */
 	public ThreadSafeIndexBuilder(InvertedIndex index, WorkQueue workers) {
 		super(index);
@@ -66,14 +68,14 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 		/**
 		 * A Constructor for our task master
 		 * 
-		 * @param paths
-		 * @param index
-		 * @param workers
+		 * @param paths   - The list of paths that need to be added to index
+		 * @param index   - Reference to index
+		 * @param workers - reference to worker queue
 		 */
 		private TaskMaster(List<Path> paths, ThreadSafeIndex index, WorkQueue workers) {
 			super();
 			this.paths = paths;
-			this.workers = workers; 
+			this.workers = workers;
 			this.index = index;
 		}
 
@@ -101,7 +103,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 			 * Constructor for the Task, initializes the path object and increments
 			 * TaskMaster's pending work
 			 * 
-			 * @param path
+			 * @param path - This task's path
 			 */
 			public Task(Path path) {
 				this.path = path;
@@ -110,14 +112,16 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 			}
 
 			/**
-			 * Carries out the work and then decrements TaskMaster's pending work
+			 * Carries out the work and then decrements TaskMaster's pending work. In this
+			 * case our work is to build a file into this thread's local index and then add
+			 * this local index into the global index
 			 */
 			@Override
 			public void run() {
 				try {
 					InvertedIndex local = new InvertedIndex();
 					InvertedIndexBuilder.buildFile(path, local);
-					synchronized(index) {
+					synchronized (index) {
 						index.addLocal(local);
 					}
 				} catch (IOException e) {

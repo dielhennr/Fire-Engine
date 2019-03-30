@@ -33,8 +33,10 @@ public class ThreadSafeResultFinder extends ResultFinder {
 	private static final Logger log = LogManager.getLogger();
 
 	/**
-	 * @param index
-	 * @param workers
+	 * Constructor
+	 * 
+	 * @param index   - Reference to our index
+	 * @param workers - Reference to worker queue
 	 */
 	public ThreadSafeResultFinder(InvertedIndex index, WorkQueue workers) {
 		super(index);
@@ -42,6 +44,13 @@ public class ThreadSafeResultFinder extends ResultFinder {
 		this.workers = workers;
 	}
 
+	/**
+	 * Main thread creates a new TaskMaster, starts it, and then waits for all work
+	 * to be finished
+	 * 
+	 * @param exact     - exact or partial search
+	 * @param queryFile - File of queries to parse and search for.
+	 */
 	@Override
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
 		TaskMaster master = new TaskMaster(this.workers, this.queryMap, this.index, queryFile, exact);
@@ -58,6 +67,11 @@ public class ThreadSafeResultFinder extends ResultFinder {
 		}
 	}
 
+	/**
+	 * Write our search results to an outputfile
+	 * 
+	 * @param outputFile
+	 */
 	@Override
 	public synchronized void writeResults(Path outputFile) throws IOException {
 		super.writeResults(outputFile);
@@ -89,11 +103,11 @@ public class ThreadSafeResultFinder extends ResultFinder {
 		/**
 		 * A Constructor for our task master
 		 * 
-		 * @param queryFile
-		 * @param exact
-		 * @param workers
-		 * @param queryMap
-		 * @param index
+		 * @param queryFile - File of queries to search for
+		 * @param exact     - Exact or partial search
+		 * @param workers   - Worker queue
+		 * @param queryMap  - Maps queries to search results
+		 * @param index     - Index to search
 		 */
 		private TaskMaster(WorkQueue workers, TreeMap<String, ArrayList<SearchResult>> queryMap, ThreadSafeIndex index,
 				Path queryFile, boolean exact) {
@@ -138,8 +152,8 @@ public class ThreadSafeResultFinder extends ResultFinder {
 			 * Constructor for the Task, initializes the path object and increments
 			 * TaskMaster's pending work
 			 * 
-			 * @param line
-			 * @param exact
+			 * @param line  - Query line to search for
+			 * @param exact - Exact or partial search
 			 */
 			public Task(String line, boolean exact) {
 				this.line = line;
@@ -149,7 +163,9 @@ public class ThreadSafeResultFinder extends ResultFinder {
 			}
 
 			/**
-			 * Carries out the work and then decrements TaskMaster's pending work
+			 * Carries out the work and then decrements TaskMaster's pending work In this
+			 * case our work is to stem a query line, search for it in out index and put the
+			 * results into our queryMap
 			 */
 			@Override
 			public void run() {

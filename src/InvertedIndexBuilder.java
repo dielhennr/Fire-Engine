@@ -23,7 +23,7 @@ public class InvertedIndexBuilder {
 	/**
 	 * Constructor
 	 * 
-	 * @param index
+	 * @param index - Index to build
 	 */
 	public InvertedIndexBuilder(InvertedIndex index) {
 		this.index = index;
@@ -32,7 +32,7 @@ public class InvertedIndexBuilder {
 	/**
 	 * Builds an InvertedIndex object from a list of files
 	 *
-	 * @param files
+	 * @param files - List of files to add to index
 	 * @throws IOException
 	 */
 	public void build(List<Path> files) throws IOException {
@@ -44,7 +44,7 @@ public class InvertedIndexBuilder {
 	/**
 	 * Builds an InvertedIndex object from a given starting path
 	 * 
-	 * @param start
+	 * @param start - Directory to start search from
 	 * @throws IOException
 	 */
 	public void build(Path start) throws IOException {
@@ -54,8 +54,8 @@ public class InvertedIndexBuilder {
 	/**
 	 * Adds stemmed words of one file to the Inverted Index
 	 * 
-	 * @param file
-	 * @param index
+	 * @param file  - File to add to index
+	 * @param index - Index to build
 	 * @throws IOException
 	 */
 	public static void buildFile(Path file, InvertedIndex index) throws IOException {
