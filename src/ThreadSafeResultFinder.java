@@ -24,10 +24,10 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 public class ThreadSafeResultFinder extends ResultFinder {
 
 	/** Index to search */
-	private ThreadSafeIndex index;
+	private final ThreadSafeIndex index;
 
 	/** Work Queue */
-	private WorkQueue workers;
+	private final WorkQueue workers;
 
 	/** Logger to use for this class. */
 	private static final Logger log = LogManager.getLogger();
