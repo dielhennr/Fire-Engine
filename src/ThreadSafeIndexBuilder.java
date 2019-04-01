@@ -36,6 +36,11 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 
 	}
 
+	/**
+	 * Builds out ThreadSafeIndex given a starting point in a file system
+	 * 
+	 * @param start
+	 */
 	public void build(Path start) throws IOException {
 		TaskMaster master = new TaskMaster(TextFileFinder.list(start), index, this.workers);
 		master.start();

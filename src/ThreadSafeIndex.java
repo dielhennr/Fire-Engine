@@ -159,6 +159,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 	
 	/**
 	 * @param local
+	 * @see InvertedIndex#addLocal(InvertedIndex)
 	 */
 	@Override
 	public void addLocal(InvertedIndex local) {
