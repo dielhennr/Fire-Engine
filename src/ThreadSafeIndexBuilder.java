@@ -23,16 +23,15 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	/** Worker queue to use */
 	private final WorkQueue workers;
 
-	// TODO Fix the InvertedIndex to ThreadSafeInvertedIndex
 	/**
 	 * Constructor
 	 * 
 	 * @param index   - reference to the index we are building
 	 * @param workers - reference to worker queue
 	 */
-	public ThreadSafeIndexBuilder(InvertedIndex index, WorkQueue workers) {
+	public ThreadSafeIndexBuilder(ThreadSafeIndex index, WorkQueue workers) {
 		super(index);
-		this.index = (ThreadSafeIndex) super.index;
+		this.index = (ThreadSafeIndex) index;
 		this.workers = workers;
 
 	}
@@ -66,7 +65,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	 * Adds tasks to WorkQueue and keeps track of pending work
 	 * 
 	 * @see WorkTracker
-	 * @author ryandielhenn
+	 * @author Ryan Dielhenn
 	 */
 	private static class TaskMaster extends WorkTracker {
 
@@ -135,9 +134,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 				try {
 					InvertedIndex local = new InvertedIndex();
 					InvertedIndexBuilder.buildFile(path, local);
-					synchronized (index) { // TODO Remove
-						index.addLocal(local);
-					}
+					index.addAll(local);
 				} catch (IOException e) {
 					log.debug("Could not add " + path + " to the index");
 				}

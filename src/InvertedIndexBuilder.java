@@ -18,7 +18,7 @@ public class InvertedIndexBuilder {
 	/**
 	 * Stores a reference to an InvertedIndex
 	 */
-	protected final InvertedIndex index; // TODO Make private
+	private final InvertedIndex index;
 
 	/**
 	 * Constructor

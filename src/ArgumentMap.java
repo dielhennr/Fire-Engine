@@ -164,6 +164,25 @@ public class ArgumentMap {
 	}
 
 	/**
+	 * Returns the value to which the specified flag is mapped as a {@link Integer},
+	 * or the default value if there is no mapping for the flag.
+	 * 
+	 * @param flag         - The flag to lookup
+	 * @param defaultValue - The value to default to if flag maps to invalid value
+	 * @return output - Output as an integer
+	 */
+	public Integer getInteger(String flag, int defaultValue) {
+		int output;
+		try {
+			output = Integer.parseInt(this.getString(flag));
+		} catch (NumberFormatException nfe) {
+			System.err.println("Defaulting to " + defaultValue + ", " + this.getString(flag) + " is invalid.");
+			output = defaultValue;
+		}
+		return output;
+	}
+
+	/**
 	 * Returns the value to which the specified flag is mapped as a {@link Path}, or
 	 * {@code null} if unable to retrieve this mapping for any reason (including
 	 * being unable to convert the value to a {@link Path} or no value existing for

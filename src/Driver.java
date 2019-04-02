@@ -21,33 +21,23 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = null;
 		InvertedIndexBuilder builder = null;
-		ResultFinder resultFinder = null;
+		ResultFinderInterface resultFinder = null;
 		WorkQueue workers = null;
 
 		if (map.hasFlag("-threads")) {
-			/*
-			 * TODO
-			 * 
-			 * ThreadSafeInvertedIndex threadSafe = ..
-			 * index = threadSafe;
-			 */
-			index = new ThreadSafeIndex();
+			ThreadSafeIndex threadIndex = new ThreadSafeIndex();
+			index = threadIndex;
 			int threads = 5;
 			if (map.hasValue("-threads")) {
-				// TODO Add a map.getInteger() method for this
-				String tVal = map.getString("-threads");
-				try {
-					threads = Integer.parseInt(tVal);
-				} catch (NumberFormatException nfe) {
-					System.err.println("Defaulting number of threads to 5. " + tVal + " is invalid.");
-				}
+				threads = map.getInteger("-threads", 5);
 				if (threads < 1) {
 					threads = 5;
 				}
 			}
 			workers = new WorkQueue(threads);
-			builder = new ThreadSafeIndexBuilder(index, workers);
-			resultFinder = new ThreadSafeResultFinder(index, workers);
+			builder = new ThreadSafeIndexBuilder(threadIndex, workers);
+			resultFinder = new ThreadSafeResultFinder(threadIndex, workers);
+			
 		} else {
 			index = new InvertedIndex();
 			builder = new InvertedIndexBuilder(index);
@@ -102,8 +92,11 @@ public class Driver {
 				System.err.println("Issue writing search result file");
 			}
 		}
-		
-		// TODO if workers != null call workers.shutdown()
+
+		if (workers != null) {
+			workers.shutdown();
+		}
+
 	}
 
 }

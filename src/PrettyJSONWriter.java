@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -314,7 +314,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see #asResultObject(TreeMap, Writer, int)
 	 */
-	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException {
+	public static void asResultObject(TreeMap<String, List<SearchResult>> elements, Path path) throws IOException {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asResultObject(elements, writer, 0);
@@ -329,7 +329,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @see #asResultObject(TreeMap, Writer, int)
 	 */
-	public static String asResultObject(TreeMap<String, ArrayList<SearchResult>> elements) {
+	public static String asResultObject(TreeMap<String, List<SearchResult>> elements) {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
 		try {
 			StringWriter writer = new StringWriter();
@@ -357,7 +357,7 @@ public class PrettyJSONWriter {
 	 * @see #indent(Writer, int)
 	 * @see #quote(String, Writer)
 	 */
-	public static void asResultObject(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+	public static void asResultObject(TreeMap<String, List<SearchResult>> elements, Writer writer, int level)
 			throws IOException {
 		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
 		writer.write("{");
@@ -369,7 +369,7 @@ public class PrettyJSONWriter {
 			quote(elem, writer);
 			writer.write(": ");
 			writer.write("[");
-			ArrayList<SearchResult> results = elements.get(elem);
+			List<SearchResult> results = elements.get(elem);
 			if (results != null) {
 				for (SearchResult result : results) {
 					writer.write(System.lineSeparator());

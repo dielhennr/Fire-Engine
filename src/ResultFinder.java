@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * 
  * @author Ryan Dielhenn
  */
-public class ResultFinder {
+public class ResultFinder implements ResultFinderInterface {
 
 	/**
 	 * Reference to index so we can perform searches.
@@ -26,7 +26,7 @@ public class ResultFinder {
 	/**
 	 * Queries mapped to search results found from search
 	 */
-	protected final TreeMap<String, ArrayList<SearchResult>> queryMap;
+	private final TreeMap<String, List<SearchResult>> queryMap;
 
 	/**
 	 * Constructor
@@ -35,7 +35,7 @@ public class ResultFinder {
 	 */
 	public ResultFinder(InvertedIndex index) {
 		this.index = index;
-		this.queryMap = new TreeMap<String, ArrayList<SearchResult>>();
+		this.queryMap = new TreeMap<String, List<SearchResult>>();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class ResultFinder {
 	 * @throws IOException
 	 */
 	public void writeResults(Path outputFile) throws IOException {
-		PrettyJSONWriter.asResultObject(this.queryMap, outputFile);
+		PrettyJSONWriter.asResultObject(queryMap, outputFile);
 	}
 
 }

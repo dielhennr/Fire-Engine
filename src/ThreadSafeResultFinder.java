@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -15,23 +15,21 @@ import org.apache.logging.log4j.Logger;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
-/*
- * TODO
- * 
- * ResultFinderInterface with the common methods
- * implement this interface for ResultFinder and ThreadSafeResultFinder
- */
-
 /**
  * A thread safe ResultFinder
  * 
  * @author Ryan Dielhenn
  *
  */
-public class ThreadSafeResultFinder extends ResultFinder {
+public class ThreadSafeResultFinder implements ResultFinderInterface {
 
 	/** Index to search */
 	private final ThreadSafeIndex index;
+
+	/**
+	 * Queries mapped to search results found from search
+	 */
+	private final TreeMap<String, List<SearchResult>> queryMap;
 
 	/** Work Queue */
 	private final WorkQueue workers;
@@ -45,10 +43,10 @@ public class ThreadSafeResultFinder extends ResultFinder {
 	 * @param index   - Reference to our index
 	 * @param workers - Reference to worker queue
 	 */
-	public ThreadSafeResultFinder(InvertedIndex index, WorkQueue workers) {
-		super(index);
-		this.index = (ThreadSafeIndex) index;
+	public ThreadSafeResultFinder(ThreadSafeIndex index, WorkQueue workers) {
+		this.index = index;
 		this.workers = workers;
+		this.queryMap = new TreeMap<String, List<SearchResult>>();
 	}
 
 	/**
@@ -78,11 +76,12 @@ public class ThreadSafeResultFinder extends ResultFinder {
 	 * Write our search results to an outputfile
 	 * 
 	 * @param outputFile
+	 * @throws IOException
 	 */
-	@Override
-	public synchronized void writeResults(Path outputFile) throws IOException {
-		// TODO sync on queryMap here
-		super.writeResults(outputFile);
+	public void writeResults(Path outputFile) throws IOException {
+		synchronized (queryMap) {
+			PrettyJSONWriter.asResultObject(queryMap, outputFile);
+		}
 	}
 
 	/**
@@ -97,7 +96,7 @@ public class ThreadSafeResultFinder extends ResultFinder {
 		private final WorkQueue workers;
 
 		/** Queries mapped to search results found from search */
-		private final TreeMap<String, ArrayList<SearchResult>> queryMap;
+		private final TreeMap<String, List<SearchResult>> queryMap;
 
 		/** The Index to search */
 		private final ThreadSafeIndex index;
@@ -117,7 +116,7 @@ public class ThreadSafeResultFinder extends ResultFinder {
 		 * @param queryMap  - Maps queries to search results
 		 * @param index     - Index to search
 		 */
-		private TaskMaster(WorkQueue workers, TreeMap<String, ArrayList<SearchResult>> queryMap, ThreadSafeIndex index,
+		private TaskMaster(WorkQueue workers, TreeMap<String, List<SearchResult>> queryMap, ThreadSafeIndex index,
 				Path queryFile, boolean exact) {
 			super();
 			this.workers = workers;
@@ -184,16 +183,11 @@ public class ThreadSafeResultFinder extends ResultFinder {
 				/** Add the query line and it's search results to the queryMap */
 				if (!words.isEmpty()) {
 					String query = String.join(" ", words);
-					synchronized (queryMap) {
-						queryMap.put(query, index.search(words, exact));
-					}
-					
-					/* TODO
+
 					List<SearchResult> results = index.search(words, exact);
 					synchronized (queryMap) {
 						queryMap.put(query, results);
 					}
-					*/
 				}
 				decrementPending();
 			}

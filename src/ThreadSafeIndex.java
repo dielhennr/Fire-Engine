@@ -11,12 +11,6 @@ import java.util.List;
  */
 public class ThreadSafeIndex extends InvertedIndex {
 
-	/*
-	 * TODO Need to override exactSearcn and partialSearch but not search.
-	 * 
-	 * 
-	 */
-	
 	/**
 	 * The lock used to protect concurrent access to the underlying data structure.
 	 */
@@ -42,7 +36,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.writeLock().unlock();
 		}
 	}
-	
+
 	// TODO ....
 	/**
 	 * @see InvertedIndex#addAll(List, String, int)
@@ -56,17 +50,17 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.writeLock().unlock();
 		}
 	}
-	
-	// TODO Use the lock instead of synchronized and make sure its for reading!
-	
+
 	/**
 	 * @see InvertedIndex#writeIndex(Path)
 	 */
 	@Override
-	public synchronized void writeIndex(Path outputFile) throws IOException {
+	public void writeIndex(Path outputFile) throws IOException {
+		lock.readLock().lock();
 		super.writeIndex(outputFile);
+		lock.readLock().unlock();
 	}
-	
+
 	/**
 	 * @see InvertedIndex#writeLocations(Path)
 	 */
@@ -87,7 +81,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * @see InvertedIndex#empty()
 	 */
@@ -139,12 +133,12 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * @see InvertedIndex#contains(String, String)
 	 */
 	@Override
-	public synchronized boolean contains(String word, String file) { // TODO Remove synchronized
+	public boolean contains(String word, String file) { 
 		lock.readLock().lock();
 		try {
 			return super.contains(word, file);
@@ -152,33 +146,46 @@ public class ThreadSafeIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
-	
+
 	/**
-	 * @see InvertedIndex#search(Collection, boolean)
+	 * @see InvertedIndex#exactSearch(java.util.Collection)
 	 */
 	@Override
-	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) { // TODO Remove
+	public ArrayList<SearchResult> exactSearch(Collection<String> line) {
 		lock.readLock().lock();
 		try {
-			return super.search(queries, exact);
+			return super.exactSearch(line);
 		} finally {
 			lock.readLock().unlock();
 		}
 	}
-	
-	// TODO Update Javadoc to indicate that the local index should not be accessed by multiple threads
-	// (or just indicate the synchronization of local must be handled by the caller)
+
 	/**
-	 * @param local
-	 * @see InvertedIndex#addLocal(InvertedIndex)
+	 * @see InvertedIndex#partialSearch(java.util.Collection)
 	 */
 	@Override
-	public void addLocal(InvertedIndex local) {
+	public ArrayList<SearchResult> partialSearch(Collection<String> queries) {
+		lock.readLock().lock();
+		try {
+			return super.partialSearch(queries);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	/**
+	 * Adds a threads local data to this. The synchronization of @param local must
+	 * be handled by the caller
+	 * 
+	 * @param local - The thread's local index to add
+	 * @see InvertedIndex#addAll(InvertedIndex)
+	 */
+	@Override
+	public void addAll(InvertedIndex local) {
 		lock.writeLock().lock();
 		try {
-			super.addLocal(local);
-		} 
-		finally {
+			super.addAll(local);
+		} finally {
 			lock.writeLock().unlock();
 		}
 	}
