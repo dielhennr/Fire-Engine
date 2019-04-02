@@ -25,9 +25,16 @@ public class Driver {
 		WorkQueue workers = null;
 
 		if (map.hasFlag("-threads")) {
+			/*
+			 * TODO
+			 * 
+			 * ThreadSafeInvertedIndex threadSafe = ..
+			 * index = threadSafe;
+			 */
 			index = new ThreadSafeIndex();
 			int threads = 5;
 			if (map.hasValue("-threads")) {
+				// TODO Add a map.getInteger() method for this
 				String tVal = map.getString("-threads");
 				try {
 					threads = Integer.parseInt(tVal);
@@ -95,6 +102,8 @@ public class Driver {
 				System.err.println("Issue writing search result file");
 			}
 		}
+		
+		// TODO if workers != null call workers.shutdown()
 	}
 
 }

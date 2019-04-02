@@ -254,6 +254,9 @@ public class InvertedIndex {
 		}
 	}
 
+	// TODO Refactor to addAll
+	// TODO Update the Javadoc to state this only works reliably when there is no overlap between the local and this index.	
+	
 	/**
 	 * Combines a thread's local data with the main thread's data
 	 * 
@@ -273,9 +276,9 @@ public class InvertedIndex {
 				this.index.put(word, local.index.get(word));
 			}
 		}
+		
 		for (String location : local.locations.keySet()) {
 			this.locations.put(location, this.locations.getOrDefault(location, 0) + local.locations.get(location));
-
 		}
 	}
 

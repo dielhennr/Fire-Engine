@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class WorkTracker {
 
+	// TODO Integrate pending into WorkQueue
+	
 	/** Logger to use */
 	private final Logger log = LogManager.getLogger();
 
