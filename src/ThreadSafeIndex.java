@@ -37,7 +37,6 @@ public class ThreadSafeIndex extends InvertedIndex {
 		}
 	}
 
-	// TODO ....
 	/**
 	 * @see InvertedIndex#addAll(List, String, int)
 	 */
@@ -138,7 +137,7 @@ public class ThreadSafeIndex extends InvertedIndex {
 	 * @see InvertedIndex#contains(String, String)
 	 */
 	@Override
-	public boolean contains(String word, String file) { 
+	public boolean contains(String word, String file) {
 		lock.readLock().lock();
 		try {
 			return super.contains(word, file);
