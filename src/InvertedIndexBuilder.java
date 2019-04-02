@@ -18,7 +18,7 @@ public class InvertedIndexBuilder {
 	/**
 	 * Stores a reference to an InvertedIndex
 	 */
-	protected final InvertedIndex index;
+	protected final InvertedIndex index; // TODO Make private
 
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ public class InvertedIndexBuilder {
 	public void build(Path start) throws IOException {
 		build(TextFileFinder.list(start));
 	}
-
+	
 	/**
 	 * Adds stemmed words of one file to the Inverted Index
 	 * 

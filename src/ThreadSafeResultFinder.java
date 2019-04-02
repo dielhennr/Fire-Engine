@@ -15,6 +15,13 @@ import org.apache.logging.log4j.Logger;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
+/*
+ * TODO
+ * 
+ * ResultFinderInterface with the common methods
+ * implement this interface for ResultFinder and ThreadSafeResultFinder
+ */
+
 /**
  * A thread safe ResultFinder
  * 
@@ -74,6 +81,7 @@ public class ThreadSafeResultFinder extends ResultFinder {
 	 */
 	@Override
 	public synchronized void writeResults(Path outputFile) throws IOException {
+		// TODO sync on queryMap here
 		super.writeResults(outputFile);
 	}
 
@@ -179,6 +187,13 @@ public class ThreadSafeResultFinder extends ResultFinder {
 					synchronized (queryMap) {
 						queryMap.put(query, index.search(words, exact));
 					}
+					
+					/* TODO
+					List<SearchResult> results = index.search(words, exact);
+					synchronized (queryMap) {
+						queryMap.put(query, results);
+					}
+					*/
 				}
 				decrementPending();
 			}

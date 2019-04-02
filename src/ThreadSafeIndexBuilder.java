@@ -23,6 +23,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	/** Worker queue to use */
 	private final WorkQueue workers;
 
+	// TODO Fix the InvertedIndex to ThreadSafeInvertedIndex
 	/**
 	 * Constructor
 	 * 
@@ -51,6 +52,14 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 			log.catching(Level.DEBUG, e);
 		}
 
+		/*
+		 * for (Path path : this.paths) {
+				workers.execute(new Task(path));
+			}
+			
+			workers.join();
+		 */
+		
 	}
 
 	/**
@@ -126,7 +135,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 				try {
 					InvertedIndex local = new InvertedIndex();
 					InvertedIndexBuilder.buildFile(path, local);
-					synchronized (index) {
+					synchronized (index) { // TODO Remove
 						index.addLocal(local);
 					}
 				} catch (IOException e) {

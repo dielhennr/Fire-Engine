@@ -98,6 +98,7 @@ public class SimpleReadWriteLock {
 				if (readers == 0) {
 					lock.notifyAll();
 				}
+				// TODO assert readers >= 0
 			}
 		}
 
@@ -131,10 +132,10 @@ public class SimpleReadWriteLock {
 		 * necessary.
 		 */
 		@Override
-		public void unlock() {
+		public void unlock() { // TODO assert
 			synchronized (lock) {
 				writers--;
-				if (writers == 0 || readers == 0) {
+				if (writers == 0 || readers == 0) { // TODO Remove
 					lock.notifyAll();
 				}
 			}
