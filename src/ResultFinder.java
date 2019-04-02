@@ -19,7 +19,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 public class ResultFinder implements ResultFinderInterface {
 
 	/**
-	 * Reference to index so we can perform searches.
+	 * Index to search
 	 */
 	private final InvertedIndex index;
 
@@ -64,7 +64,7 @@ public class ResultFinder implements ResultFinderInterface {
 	 * @param line  line to parse and search
 	 * @param exact whether or not we are using exact search
 	 */
-	public void addQuery(String line, boolean exact) {
+	private void addQuery(String line, boolean exact) {
 		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
 				.collect(Collectors.toCollection(TreeSet::new));

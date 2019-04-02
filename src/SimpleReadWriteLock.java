@@ -98,7 +98,7 @@ public class SimpleReadWriteLock {
 				if (readers == 0) {
 					lock.notifyAll();
 				}
-				//assert readers >= 0;
+				assert readers >= 0;
 			}
 		}
 
@@ -136,8 +136,8 @@ public class SimpleReadWriteLock {
 			synchronized (lock) {
 				writers--;
 				lock.notifyAll();
+				assert writers == 0;
 			}
-			//assert writers == 0;
 		}
 	}
 }

@@ -61,7 +61,7 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 		try {
 			this.start(queryFile, exact);
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			log.catching(Level.DEBUG, ioe);
 		}
 
 		try {
@@ -139,7 +139,6 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 			/** Add the query line and it's search results to the queryMap */
 			if (!words.isEmpty()) {
 				String query = String.join(" ", words);
-
 				List<SearchResult> results = index.search(words, exact);
 				synchronized (queryMap) {
 					queryMap.put(query, results);
