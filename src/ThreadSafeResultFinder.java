@@ -58,17 +58,35 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 	 */
 	@Override
 	public void parseQueries(Path queryFile, boolean exact) throws IOException {
-		TaskMaster master = new TaskMaster(this.workers, this.queryMap, this.index, queryFile, exact);
 		try {
-			master.start();
+			this.start(queryFile, exact);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 
 		try {
-			master.join();
+			this.workers.join();
 		} catch (InterruptedException e) {
 			log.catching(Level.DEBUG, e);
+		}
+	}
+
+	/**
+	 * Fills our WorkQueue with runnable tasks, in this case a Task is searching for
+	 * a line from the queryFile and adding the results to a queryMap
+	 * 
+	 * @param queryFile
+	 * @param exact
+	 * @throws IOException
+	 */
+	private void start(Path queryFile, boolean exact) throws IOException {
+		try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				workers.execute(new Task(line, exact));
+			}
+		} catch (IOException e) {
+			throw e;
 		}
 	}
 
@@ -85,114 +103,49 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 	}
 
 	/**
-	 * Adds tasks to WorkQueue and keeps track of pending work
-	 *
-	 * @see WorkTracker
-	 * @author Ryan Dielhenn
+	 * A task class that represents a piece of work for a thread to carry out
 	 */
-	private static class TaskMaster extends WorkTracker {
-
-		/** Our WorkQueue of threads */
-		private final WorkQueue workers;
-
-		/** Queries mapped to search results found from search */
-		private final TreeMap<String, List<SearchResult>> queryMap;
-
-		/** The Index to search */
-		private final ThreadSafeIndex index;
-
-		/** The file of queries to search for */
-		private final Path queryFile;
+	private class Task implements Runnable {
+		/** The line to search for */
+		private final String line;
 
 		/** Exact or partial search */
 		private final boolean exact;
 
 		/**
-		 * A Constructor for our task master
+		 * Constructor for the Task, initializes the path object and increments
+		 * TaskMaster's pending work
 		 * 
-		 * @param queryFile - File of queries to search for
-		 * @param exact     - Exact or partial search
-		 * @param workers   - Worker queue
-		 * @param queryMap  - Maps queries to search results
-		 * @param index     - Index to search
+		 * @param line  - Query line to search for
+		 * @param exact - Exact or partial search
 		 */
-		private TaskMaster(WorkQueue workers, TreeMap<String, List<SearchResult>> queryMap, ThreadSafeIndex index,
-				Path queryFile, boolean exact) {
-			super();
-			this.workers = workers;
+		public Task(String line, boolean exact) {
+			this.line = line;
 			this.exact = exact;
-			this.queryFile = queryFile;
-			this.queryMap = queryMap;
-			this.index = index;
+			log.debug("Task for {} created.", line);
 		}
 
 		/**
-		 * Fills our WorkQueue with runnable tasks, in this case a Task is searching for
-		 * a line from the queryFile and adding the results to a queryMap
-		 * 
-		 * @throws IOException
+		 * Carries out the work and then decrements TaskMaster's pending work In this
+		 * case our work is to stem a query line, search for it in out index and put the
+		 * results into our queryMap
 		 */
-		private void start() throws IOException {
-			try (BufferedReader reader = Files.newBufferedReader(queryFile, StandardCharsets.UTF_8)) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					workers.execute(new Task(line, exact));
+		@Override
+		public void run() {
+			/** Stem the query line and collect stemmed words into a set */
+			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+			TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
+					.collect(Collectors.toCollection(TreeSet::new));
+			/** Add the query line and it's search results to the queryMap */
+			if (!words.isEmpty()) {
+				String query = String.join(" ", words);
+
+				List<SearchResult> results = index.search(words, exact);
+				synchronized (queryMap) {
+					queryMap.put(query, results);
 				}
-
-			} catch (IOException e) {
-				throw e;
 			}
-
 		}
 
-		/**
-		 * A task class that represents a piece of work for a thread to carry out
-		 */
-		private class Task implements Runnable {
-			/** The line to search for */
-			private final String line;
-
-			/** Exact or partial search */
-			private final boolean exact;
-
-			/**
-			 * Constructor for the Task, initializes the path object and increments
-			 * TaskMaster's pending work
-			 * 
-			 * @param line  - Query line to search for
-			 * @param exact - Exact or partial search
-			 */
-			public Task(String line, boolean exact) {
-				this.line = line;
-				this.exact = exact;
-				incrementPending();
-				log.debug("Task for {} created.", line);
-			}
-
-			/**
-			 * Carries out the work and then decrements TaskMaster's pending work In this
-			 * case our work is to stem a query line, search for it in out index and put the
-			 * results into our queryMap
-			 */
-			@Override
-			public void run() {
-				/** Stem the query line and collect stemmed words into a set */
-				Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
-				TreeSet<String> words = TextFileStemmer.stemLineStream(line, stemmer)
-						.collect(Collectors.toCollection(TreeSet::new));
-				/** Add the query line and it's search results to the queryMap */
-				if (!words.isEmpty()) {
-					String query = String.join(" ", words);
-
-					List<SearchResult> results = index.search(words, exact);
-					synchronized (queryMap) {
-						queryMap.put(query, results);
-					}
-				}
-				decrementPending();
-			}
-
-		}
 	}
-
 }

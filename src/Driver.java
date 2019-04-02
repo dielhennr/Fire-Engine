@@ -33,8 +33,7 @@ public class Driver {
 				if (threads < 1) {
 					threads = 5;
 				}
-			}
-			
+			}	
 			workers = new WorkQueue(threads);
 			builder = new ThreadSafeIndexBuilder(threadIndex, workers);
 			resultFinder = new ThreadSafeResultFinder(threadIndex, workers);

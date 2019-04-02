@@ -26,6 +26,9 @@ public class WorkQueue {
 	/** Used to signal the queue should be shutdown. */
 	private volatile boolean shutdown;
 
+	/** Pending work */
+	private int pending;
+
 	/** The default number of threads to use when not specified. */
 	public static final int DEFAULT = 5;
 
@@ -51,6 +54,7 @@ public class WorkQueue {
 		this.workers = new PoolWorker[threads];
 
 		shutdown = false;
+		pending = 0;
 
 		// start the threads so they are waiting in the background
 		for (int i = 0; i < threads; i++) {
@@ -68,6 +72,7 @@ public class WorkQueue {
 	public void execute(Runnable r) {
 		synchronized (queue) {
 			queue.addLast(r);
+			incrementPending();
 			queue.notifyAll();
 		}
 	}
@@ -82,6 +87,41 @@ public class WorkQueue {
 
 		synchronized (queue) {
 			queue.notifyAll();
+		}
+	}
+
+	/**
+	 * Wait until we have no more work
+	 * 
+	 * @throws InterruptedException
+	 */
+	protected synchronized void join() throws InterruptedException {
+		while (this.pending > 0) {
+			this.wait();
+			log.debug("Woke up with pending at {}.", pending);
+		}
+		log.debug("Work finished.");
+	}
+
+	/**
+	 * Increment pending work
+	 */
+	private synchronized void incrementPending() {
+		this.pending++;
+	}
+
+	/**
+	 * Decrement pending work
+	 */
+	private synchronized void decrementPending() {
+		assert this.pending > 0;
+		this.pending--;
+		/**
+		 * If we have no more work, notify to wake up from join. Our threads will be
+		 * calling this method after completing a task
+		 */
+		if (pending == 0) {
+			this.notifyAll();
 		}
 	}
 
@@ -129,6 +169,7 @@ public class WorkQueue {
 
 				try {
 					r.run();
+					decrementPending();
 				} catch (RuntimeException ex) {
 					// catch runtime exceptions to avoid leaking threads
 					log.debug("Warning: Work queue encountered an exception while running.", ex);

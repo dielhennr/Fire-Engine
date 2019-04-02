@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -42,107 +41,52 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	 * @param start
 	 */
 	public void build(Path start) throws IOException {
-		TaskMaster master = new TaskMaster(TextFileFinder.list(start), index, this.workers);
-		master.start();
 
+		for (Path path : TextFileFinder.list(start)) {
+			workers.execute(new Task(path));
+		}
 		try {
-			master.join();
+			workers.join();
 		} catch (InterruptedException e) {
 			log.catching(Level.DEBUG, e);
 		}
-
-		/*
-		 * for (Path path : this.paths) {
-				workers.execute(new Task(path));
-			}
-			
-			workers.join();
-		 */
-		
 	}
 
 	/**
-	 * Adds tasks to WorkQueue and keeps track of pending work
-	 * 
-	 * @see WorkTracker
-	 * @author Ryan Dielhenn
+	 * A task class that represents a piece of work for a thread to carry out
 	 */
-	private static class TaskMaster extends WorkTracker {
-
-		/** Our list of paths to split up among threads */
-		private final List<Path> paths;
-
-		/** Our WorkQueue of threads */
-		private final WorkQueue workers;
-
-		/** A reference to our thread safe index */
-		private final ThreadSafeIndex index;
+	private class Task implements Runnable {
 
 		/**
-		 * A Constructor for our task master
+		 * The path of the file to add to our ThreadSafeIndex
+		 */
+		private final Path path;
+
+		/**
+		 * Constructor for the Task, initializes the path object and increments
+		 * TaskMaster's pending work
 		 * 
-		 * @param paths   - The list of paths that need to be added to index
-		 * @param index   - Reference to index
-		 * @param workers - reference to worker queue
+		 * @param path - This task's path
 		 */
-		private TaskMaster(List<Path> paths, ThreadSafeIndex index, WorkQueue workers) {
-			super();
-			this.paths = paths;
-			this.workers = workers;
-			this.index = index;
+		public Task(Path path) {
+			this.path = path;
+			log.debug("Task for {} created.", path);
 		}
 
 		/**
-		 * Fills our WorkQueue with runnable tasks
+		 * Carries out the work and then decrements TaskMaster's pending work. In this
+		 * case our work is to build a file into this thread's local index and then add
+		 * this local index into the global index
 		 */
-		private void start() {
-			for (Path path : this.paths) {
-				workers.execute(new Task(path));
+		@Override
+		public void run() {
+			try {
+				InvertedIndex local = new InvertedIndex();
+				InvertedIndexBuilder.buildFile(path, local);
+				index.addAll(local);
+			} catch (IOException e) {
+				log.debug("Could not add " + path + " to the index");
 			}
-
 		}
-
-		/**
-		 * A task class that represents a piece of work for a thread to carry out
-		 */
-		private class Task implements Runnable {
-
-			/**
-			 * The path of the file to add to our ThreadSafeIndex
-			 */
-			private final Path path;
-
-			/**
-			 * Constructor for the Task, initializes the path object and increments
-			 * TaskMaster's pending work
-			 * 
-			 * @param path - This task's path
-			 */
-			public Task(Path path) {
-				this.path = path;
-				incrementPending();
-				log.debug("Task for {} created.", path);
-			}
-
-			/**
-			 * Carries out the work and then decrements TaskMaster's pending work. In this
-			 * case our work is to build a file into this thread's local index and then add
-			 * this local index into the global index
-			 */
-			@Override
-			public void run() {
-				try {
-					InvertedIndex local = new InvertedIndex();
-					InvertedIndexBuilder.buildFile(path, local);
-					index.addAll(local);
-				} catch (IOException e) {
-					log.debug("Could not add " + path + " to the index");
-				}
-				decrementPending();
-			}
-
-		}
-
 	}
-
 }
