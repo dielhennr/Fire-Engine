@@ -30,7 +30,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 	 */
 	public ThreadSafeIndexBuilder(ThreadSafeIndex index, WorkQueue workers) {
 		super(index);
-		this.index = (ThreadSafeIndex) index; // TODO Remove cast
+		this.index = index;
 		this.workers = workers;
 
 	}
@@ -45,7 +45,7 @@ public class ThreadSafeIndexBuilder extends InvertedIndexBuilder {
 		for (Path path : TextFileFinder.list(start)) {
 			workers.execute(new Task(path));
 		}
-		
+
 		try {
 			workers.join();
 		} catch (InterruptedException e) {

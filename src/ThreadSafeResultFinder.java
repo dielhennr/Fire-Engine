@@ -85,8 +85,6 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 			while ((line = reader.readLine()) != null) {
 				workers.execute(new Task(line, exact));
 			}
-		} catch (IOException e) { // TODO Remove
-			throw e;
 		}
 	}
 
@@ -139,16 +137,13 @@ public class ThreadSafeResultFinder implements ResultFinderInterface {
 			/** Add the query line and it's search results to the queryMap */
 			if (!words.isEmpty()) {
 				String query = String.join(" ", words);
-				
-				// TODO When checking queryMap make sure its properly synchronized
-				/*
-				synch(...) {
-					if (already searched) {
+
+				synchronized (queryMap) {
+					if (queryMap.containsKey(query)) {
 						return;
 					}
 				}
-				*/
-				
+
 				List<SearchResult> results = index.search(words, exact);
 				synchronized (queryMap) {
 					queryMap.put(query, results);
