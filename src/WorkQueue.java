@@ -72,7 +72,7 @@ public class WorkQueue {
 	public void execute(Runnable r) {
 		synchronized (queue) {
 			queue.addLast(r);
-			incrementPending();
+			incrementPending(); // TODO Move before the synchronized (queue) block
 			queue.notifyAll();
 		}
 	}
@@ -95,7 +95,7 @@ public class WorkQueue {
 	 * 
 	 * @throws InterruptedException
 	 */
-	protected synchronized void join() throws InterruptedException {
+	protected synchronized void join() throws InterruptedException { // TODO public
 		while (this.pending > 0) {
 			this.wait();
 			log.debug("Woke up with pending at {}.", pending);
