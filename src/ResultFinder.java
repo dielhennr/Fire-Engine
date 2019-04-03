@@ -52,7 +52,7 @@ public class ResultFinder implements ResultFinderInterface {
 				addQuery(line, exact);
 			}
 
-		} catch (IOException e) {
+		} catch (IOException e) { // TODO Remove catch
 			throw e;
 		}
 	}
@@ -70,6 +70,7 @@ public class ResultFinder implements ResultFinderInterface {
 				.collect(Collectors.toCollection(TreeSet::new));
 		if (!words.isEmpty()) {
 			String query = String.join(" ", words);
+			// TODO Only search if query is not already in your map queryMap.containsKey(query)
 			queryMap.put(query, index.search(words, exact));
 		}
 	}
